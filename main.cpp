@@ -123,7 +123,7 @@ void texturedSphere() {
 
     World world;
 
-    auto texture = make_shared< ImageTexture >("wood.jpg");
+    auto texture = make_shared< ImageTexture >("earth.jpg");
     auto surface = make_shared< Diffuse >( texture );
     auto sphere = make_shared< Sphere >( Point3( 0, 0, 0 ), 2, surface );
 
