@@ -6,6 +6,7 @@
 #include "Parallelogram.h"
 #include "Mesh.h"
 #include "AABB.h"
+#include "World.h"
 
 #include <memory>
 #include <vector>
@@ -23,32 +24,26 @@ class Box : public Composite {
             Vector3 sideY = Vector3( 0, max.y() - min.y(), 0 );
             Vector3 sideZ = Vector3( 0, 0, max.z() - min.z() );
 
-            primitiveList.push_back( make_shared< Parallelogram >( Point3( min.x(), min.y(), max.z() ), sideX, sideY, material ) );
-            primitiveList.push_back( make_shared< Parallelogram >( Point3( max.x(), min.y(), max.z() ), -sideZ, sideY, material ) );
-            primitiveList.push_back( make_shared< Parallelogram >( Point3( max.x(), min.y(), min.z() ), -sideX, sideY, material ) );
-            primitiveList.push_back( make_shared< Parallelogram >( Point3( min.x(), min.y(), min.z() ), sideZ, sideY, material ) );
-            primitiveList.push_back( make_shared< Parallelogram >( Point3( min.x(), max.y(), max.z() ), sideX, -sideZ, material ) );
-            primitiveList.push_back( make_shared< Parallelogram >( Point3( min.x(), min.y(), min.z() ), sideX, sideZ, material ) );
+            BLAS.add( make_shared< Parallelogram >( Point3( min.x(), min.y(), max.z() ), sideX, sideY, material ) );
+            BLAS.add( make_shared< Parallelogram >( Point3( max.x(), min.y(), max.z() ), -sideZ, sideY, material ) );
+            BLAS.add( make_shared< Parallelogram >( Point3( max.x(), min.y(), min.z() ), -sideX, sideY, material ) );
+            BLAS.add( make_shared< Parallelogram >( Point3( min.x(), min.y(), min.z() ), sideZ, sideY, material ) );
+            BLAS.add( make_shared< Parallelogram >( Point3( min.x(), max.y(), max.z() ), sideX, -sideZ, material ) );
+            BLAS.add( make_shared< Parallelogram >( Point3( min.x(), min.y(), min.z() ), sideX, sideZ, material ) );
 
-            boundingBox = AABB( min, max );
+            BLAS.setupAccelerationStructure();
         }
 
         AABB getBoundingBox() const override {
-            return boundingBox;
+            return BLAS.getBoundingBox();
         }
 
         bool hit( const Ray &ray, Interval interval, IntersectionManager &intersectionManager ) const override{
-            //not needed
-            return false;
+            return BLAS.raycast( ray, interval, intersectionManager );
         }
 
-        std::vector< shared_ptr< Primitive >> getFaces() const override {
-            return primitiveList;
-        }
-
-    public:
-        AABB boundingBox;
-        std::vector< shared_ptr< Primitive >> primitiveList;
+    private:
+        World BLAS;
 };
 
 #endif

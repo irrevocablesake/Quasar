@@ -26,31 +26,24 @@ public:
         for (int i = 0; i < 1000; i++)
         {
             auto sphere = make_shared<Sphere>(Point3(generateRandomNumber( -100 , 65 ), generateRandomNumber(300, 465), generateRandomNumber(300, 465)), 10, material);
-            // sphere = make_shared< RotateY >( sphere, 15 );
-            boundingBox = AABB(boundingBox, sphere->getBoundingBox());
-            primitiveList.push_back(sphere);
+            BLAS.add(sphere);
         }
+
+        BLAS.setupAccelerationStructure();
     }
 
     AABB getBoundingBox() const override
     {
-        return boundingBox;
+        return BLAS.getBoundingBox();
     }
 
     bool hit(const Ray &ray, Interval interval, IntersectionManager &intersectionManager) const override
     {
-        // not needed
-        return false;
+        return BLAS.raycast( ray, interval, intersectionManager );
     }
 
-    std::vector<shared_ptr<Primitive>> getFaces() const override
-    {
-        return primitiveList;
-    }
-
-public:
-    AABB boundingBox;
-    std::vector<shared_ptr<Primitive>> primitiveList;
+private:
+    World BLAS;
 };
 
 #endif

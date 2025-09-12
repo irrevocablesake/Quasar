@@ -47,7 +47,6 @@ class BVHNode {
 
             if( numberOfObjects == 1 ){
                 left = right = objects[ start ];
-              
             }
             else if( numberOfObjects == 2 ){
                 left = objects[ start ];

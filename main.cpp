@@ -539,9 +539,37 @@ void heroRender(){
     renderer.render();
 }
 
+void BLAS(){
+     const int IMAGE_WIDTH = 800;
+    const double ASPECT_RATIO = 1.0;
+    Image image( IMAGE_WIDTH, ASPECT_RATIO );
+
+    World world;
+
+    auto light = make_shared< Light >( Color3( 7, 7, 7 ) );
+    world.add( make_shared< Parallelogram >( Point3( 123, 554, 147 ), Vector3( 300, 0, 0 ), Vector3( 0, 0, 265 ), light ) );
+
+    std::shared_ptr< Mesh > sphereBox = make_shared< SphereBox >();
+    sphereBox = make_shared< RotateY >( sphereBox, 45 );
+    world.add( sphereBox );
+
+    Renderer renderer( world, image );
+    renderer.samplesPerPixel = 200;
+    renderer.maxDepth = 25;
+    renderer.vFOV = 40;
+    renderer.lookFrom = Point3( 478, 278, -600 );
+    renderer.lookAt = Point3( 278, 278, 0 );
+    renderer.vUp = Vector3( 0, 1, 0 );
+    renderer.background = Color3( 0, 0, 0 );
+    renderer.defocusAngle = 0;
+    renderer.focusDistance = 10.0;
+    renderer.initialize();
+    renderer.render();
+}
+
 int main(){
     
-    int scene = 6;
+    int scene = 12;
 
     switch( scene ){
         case 1: classicScene();  break;
@@ -555,6 +583,7 @@ int main(){
         case 9: perlinNoise(); break;
         case 10: heroRender(); break;
         case 11: motionBlur(); break;
+        case 12: BLAS(); break;
     }
     
     return 0;

@@ -23,7 +23,6 @@ class Primitive : public Mesh {
 class Composite: public Mesh {
     public:
         virtual ~Composite() = default;
-        virtual std::vector< shared_ptr< Primitive > > getFaces() const = 0;
 };
 
 #endif

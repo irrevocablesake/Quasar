@@ -25,19 +25,11 @@ class World{
         }
 
         void add( shared_ptr< Mesh > mesh ){
-            if( auto composite = std::dynamic_pointer_cast< Composite >( mesh ) ){
-                auto faces = composite -> getFaces();
-                for( auto &face : faces ){
-                    meshList.push_back( face );
-                }
-            }
-            else{
-                meshList.push_back( mesh );
-            }
+            meshList.push_back( mesh );
             boundingBox = AABB( boundingBox, mesh -> getBoundingBox() );
         }
 
-        bool raycast( Ray &ray, Interval interval, IntersectionManager &intersectionManager ){
+        bool raycast( const Ray &ray, Interval interval, IntersectionManager &intersectionManager ) const{
             IntersectionManager record;
             bool hitAnything = false;
             double closestSoFar = interval.max;
