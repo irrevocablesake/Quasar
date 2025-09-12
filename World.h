@@ -6,7 +6,6 @@
 #include "IntersectionManager.h"
 #include "AABB.h"
 #include "BVHNode.h"
-#include "Box.h"
 
 #include <vector>
 #include <memory>
