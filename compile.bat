@@ -1,3 +1,2 @@
-@REM g++ -std=c++20 Renderer.h Vector3.h Point3.h Dimension3.h Color3.h Ray.h Camera.h Image.h Viewport.h Mesh.h Sphere.h World.h Interval.h Material.h IntersectionManager.h Random.h PixelSampler.h main.cpp AABB.h BVHNode.h Texture.h ImageLoader/ImageLoader.h ImageLoader/stb_image.h constants.h shapes2D.h Parallelogram.h Box.h Transformations.h Fog.h -o program
 @REM g++ -std=c++20 main.cpp -o program
 g++ -std=c++20 -O3 -march=native -DNDDEBUG main.cpp -o program
