@@ -14,6 +14,8 @@
 #include "Material.h"
 #include "Fog.h"
 #include "SphereBox.h"
+#include "Triangle.h"
+#include "LoadedMesh.h"
 
 #include <memory>
 
@@ -567,9 +569,66 @@ void BLAS(){
     renderer.render();
 }
 
+void Triangle1(){
+    const int IMAGE_WIDTH = 800;
+    const double ASPECT_RATIO = 1.0;
+    Image image( IMAGE_WIDTH, ASPECT_RATIO );
+
+    World world;
+
+    auto light = make_shared< Light >( Color3( 7, 7, 7 ) );
+    world.add( make_shared< Parallelogram >( Point3( 123, 554, 147 ), Vector3( 300, 0, 0 ), Vector3( 0, 0, 265 ), light ) );
+
+    auto triangle = make_shared< Triangle >( Point3( 123, 200, 147 ), Point3( 123, 300, 147 ), Point3( 123, 200, 400 ), light );
+    world.add( triangle );
+
+    Renderer renderer( world, image );
+    renderer.samplesPerPixel = 200;
+    renderer.maxDepth = 25;
+    renderer.vFOV = 40;
+    renderer.lookFrom = Point3( 478, 278, -600 );
+    renderer.lookAt = Point3( 278, 278, 0 );
+    renderer.vUp = Vector3( 0, 1, 0 );
+    renderer.background = Color3( 0, 0, 0 );
+    renderer.defocusAngle = 0;
+    renderer.focusDistance = 10.0;
+    renderer.initialize();
+    renderer.render();
+}
+
+void sceneLoad() {
+     const int IMAGE_WIDTH = 800;
+    const double ASPECT_RATIO = 1.0;
+    Image image( IMAGE_WIDTH, ASPECT_RATIO );
+
+    World world;
+
+    auto light = make_shared< Light >( Color3( 10, 10, 10 ) );
+    world.add( make_shared< Parallelogram >( Point3( 0, 3, 0 ), Vector3( 10, 0, 0 ), Vector3( 0, 0, 10 ), light ) );
+
+    auto suzanee = make_shared< LoadedMesh >("./models/suzanne.glb");
+    world.add( suzanee );
+
+    auto floor = make_shared< Metal >( Color3( 0.6, 0.4, 0.2 ), 0.7 );
+    world.add( make_shared< Parallelogram >( Point3( -4, -1.05, -4 ), Vector3( 8, 0, 0 ), Vector3( 0, 0, 8 ), floor ) );
+
+    Renderer renderer( world, image );
+    renderer.samplesPerPixel = 200;
+    renderer.maxDepth = 25;
+    renderer.vFOV = 30;
+    renderer.lookFrom = Point3( 0, 2.5, 8 );
+    renderer.lookAt = Point3( 0, 0, 0 );
+    renderer.vUp = Vector3( 0, 1, 0 );
+    renderer.background = Color3( 0, 0, 0 );
+    renderer.defocusAngle = 0;
+    renderer.focusDistance = 10.0;
+    renderer.initialize();
+    renderer.render();
+}
+
 int main(){
     
-    int scene = 12;
+    int scene = 14;
 
     switch( scene ){
         case 1: classicScene();  break;
@@ -584,6 +643,8 @@ int main(){
         case 10: heroRender(); break;
         case 11: motionBlur(); break;
         case 12: BLAS(); break;
+        case 13: Triangle1(); break;
+        case 14: sceneLoad(); break;
     }
     
     return 0;
