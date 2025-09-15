@@ -18,7 +18,7 @@ class Material {
             return false;
         }
 
-        virtual Color3 emitted( double u, double v, const Point3 &point, bool frontFace ) const {
+        virtual Color3 emitted( double u, double v, const Point3 &point ) const {
             return Color3( 0, 0, 0 );
         }
 };
@@ -162,12 +162,8 @@ class Light : public Material {
         Light( shared_ptr< Texture > texture ) : texture( texture ) {}
         Light( const Color3 emit ) : texture( make_shared< solidColor >( emit )) {}
 
-        Color3 emitted( double u, double v, const Point3 &point, bool frontFace ) const override {
-            if( frontFace ){
-                return texture -> value( u, v, point );
-            }
-            
-            return Color3( 0, 0, 0 );
+        Color3 emitted( double u, double v, const Point3 &point  ) const override {
+            return texture -> value( u, v, point );
         }
 
     private:
