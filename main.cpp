@@ -603,21 +603,41 @@ void sceneLoad() {
 
     World world;
 
-    auto light = make_shared< Light >( Color3( 10, 10, 10 ) );
-    world.add( make_shared< Parallelogram >( Point3( 0, 3, 0 ), Vector3( 10, 0, 0 ), Vector3( 0, 0, 10 ), light ) );
+    auto lightMaterial = make_shared< Light >( Color3( 30, 30, 30 ) );
+    shared_ptr< Mesh > lightMesh = make_shared< Parallelogram >( Point3( -2,2, -2 ), Vector3( 4, 0, 0 ), Vector3( 0, 0, 4 ), lightMaterial );
+    lightMesh = make_shared< Translate >( lightMesh, Vector3( 0, 0, -10 ));
+    // lightMesh = make_shared< RotateX >( lightMesh, 135 );
+    // lightMesh = make_shared< RotateY >( lightMesh, 45 );
+    // lightMesh = make_shared< Translate >( lightMesh, Vector3( 0, 2, 0 ));
+    // lightMesh = make_shared< Translate >( lightMesh, Vector3( 3, 0, 3 ));
 
-    auto suzanee = make_shared< LoadedMesh >("./models/suzanne.glb");
+    world.add( lightMesh );
+
+    // auto lightMaterial1 = make_shared< Light >( Color3( 5, 5, 5 ) );
+    // shared_ptr< Mesh > lightMesh1 = make_shared< Sphere >( Point3( 0, 5, -35 ), 1.0, lightMaterial1 );
+    // world.add( lightMesh1 );
+
+    // auto lightMaterial2 = make_shared< Light >( Color3( 6, 6, 6 ) );
+    // shared_ptr< Mesh > lightMesh2 = make_shared< Parallelogram >( Point3( -5 ,10, -15 ), Vector3( 10, 0, 0 ), Vector3( 0, 0, 10 ), lightMaterial2 );
+    // lightMesh2 = make_shared< Translate >( lightMesh2, Vector3( 0, 0, -10 ));
+    // world.add( lightMesh2 );
+    
+    auto suzanee = make_shared< LoadedMesh >("./models/untitled.glb");
     world.add( suzanee );
 
-    auto floor = make_shared< Metal >( Color3( 0.6, 0.4, 0.2 ), 0.7 );
-    world.add( make_shared< Parallelogram >( Point3( -4, -1.05, -4 ), Vector3( 8, 0, 0 ), Vector3( 0, 0, 8 ), floor ) );
+    auto floor = make_shared< Metal >( Color3( 0.6, 0.4, 0.2 ), 0.3 );
+    world.add( make_shared< Parallelogram >( Point3( -10, -1.05, -15 ), Vector3( 20, 0, 0 ), Vector3( 0, 0, 30 ), floor ) );
+
+    auto fogBoundary = make_shared< Sphere >( Point3( 0, 0, 0 ), 5, make_shared< Solid >( Color3( 1.0, 0.0, 0.0 ) ) );
+    auto fog = make_shared< Fog >( fogBoundary, 0.0001, make_shared< Isotropic >( Color3( 1.0, 1.0, 1.0 ) ) );
+    // world.add( fog );
 
     Renderer renderer( world, image );
-    renderer.samplesPerPixel = 200;
+    renderer.samplesPerPixel = 100;
     renderer.maxDepth = 25;
-    renderer.vFOV = 30;
-    renderer.lookFrom = Point3( 0, 2.5, 8 );
-    renderer.lookAt = Point3( 0, 0, 0 );
+    renderer.vFOV = 70;
+    renderer.lookFrom = Point3( 0, 2.0, 15 );
+    renderer.lookAt = Point3( 0, 0.0, 0 );
     renderer.vUp = Vector3( 0, 1, 0 );
     renderer.background = Color3( 0, 0, 0 );
     renderer.defocusAngle = 0;
