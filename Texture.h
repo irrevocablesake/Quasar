@@ -55,6 +55,7 @@ class CheckerTexture : public Texture {
 
 class ImageTexture : public Texture {
     public:
+        ImageTexture( const unsigned char* data, int size ) : image( data, size ) {}
         ImageTexture( const char* filename ) : image( filename ) {}
 
         Color3 value( double u, double v, const Point3 &point ) const override {
