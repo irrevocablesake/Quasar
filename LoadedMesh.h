@@ -19,10 +19,10 @@ using std::string;
 class LoadedMesh : public Composite {
 
     public:
-        LoadedMesh( string filePath ){
+        LoadedMesh( string filePath, bool useMetal, double metalFactor ){
           
             GLTFLoader loader;
-            loader.loadFile( filePath );
+            loader.loadFile( filePath, useMetal, metalFactor );
 
             std::vector< shared_ptr< Triangle >> triangles = loader.getTriangles();
             for( auto &triangle : triangles ){
