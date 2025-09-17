@@ -14,6 +14,10 @@ using std::string;
 class ImageLoader {
     public:
         ImageLoader() {}
+        ImageLoader( const unsigned char* data, int size ) {
+            loadFromMemory( data, size );
+        }
+
         ImageLoader( const char* fileName ){
             string filename = string( fileName );
             auto imageDirectory = getenv("RAYTRACING");
@@ -36,6 +40,20 @@ class ImageLoader {
             if( fdata == nullptr ) return false;
 
             bytesPerScanline = imageWidth * bytesPerPixel;
+            convertToBytes();
+
+            return true;
+        }
+
+        bool loadFromMemory( const unsigned char* data, int size ){
+
+            auto n = bytesPerPixel;
+
+            fdata = stbi_loadf_from_memory( data, size, &imageWidth, &imageHeight, &n, bytesPerPixel );
+            if( fdata == nullptr ) return false;
+
+            bytesPerScanline = imageWidth * bytesPerPixel;
+
             convertToBytes();
 
             return true;
