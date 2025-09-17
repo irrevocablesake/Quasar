@@ -22,17 +22,20 @@ class Triangle : public shape2D {
             AC = C - A;
             BC = C - B;
 
-            normal = cross( AB, AC );
-            normalizedNormal = unitVector( normal );
+            faceNormal = cross( AB, AC );
+            faceNormalizedNormal = unitVector( faceNormal );
 
-            D = dot( normal, A.toVector() );
-            denom = dot( normal, normal );
+            D = dot( faceNormalizedNormal, A.toVector() );
+            denom = dot( faceNormal, faceNormal );
 
             AABB sideAB(A, B);
             AABB sideBC(B, C);
             AABB sideAC(A, C);
             boundingBox = AABB(sideAB, sideBC);
             boundingBox = AABB(boundingBox, sideAC); 
+            
+            NormalA = NormalB = NormalC = faceNormalizedNormal;
+            hasUVs = false;
         }
 
         AABB getBoundingBox() const override {
@@ -40,13 +43,13 @@ class Triangle : public shape2D {
         }
 
         bool hit( const Ray &ray, Interval interval, IntersectionManager &intersectionManager ) const override {
-            double denominator = dot( normal, ray.direction() );
+            double denominator = dot( faceNormalizedNormal, ray.direction() );
 
             if( std::fabs( denominator ) < 1e-8 ){
                 return false;
             }
 
-            double t = ( D - dot( normal, ray.origin().toVector() )) / denominator;
+            double t = ( D - dot( faceNormalizedNormal, ray.origin().toVector() )) / denominator;
             if( !interval.contains( t ) ){
                 return false;
             }
@@ -54,8 +57,11 @@ class Triangle : public shape2D {
             Point3 intersectedPoint = ray.at( t );
             Vector3 intersectedPointVector = intersectedPoint - A;
 
-            double alpha = dot(cross(intersectedPointVector, AC), normal) / denom;
-            double beta = dot(cross(AB, intersectedPointVector), normal) / denom;
+            double beta = dot(cross(intersectedPointVector, AC), faceNormal) / denom;
+            double gamma = dot(cross(AB, intersectedPointVector), faceNormal) / denom;
+            double alpha = 1 - beta - gamma;
+
+            Vector3 normal = unitVector( NormalA * alpha + NormalB * beta + NormalC * gamma );
 
             if( !inShape( alpha, beta, intersectionManager ) ){
                 return false;
@@ -74,10 +80,36 @@ class Triangle : public shape2D {
                 return false;
             }
             
-            intersectionManager.u = alpha;
-            intersectionManager.v = beta;
+            double gamma = 1 - alpha - beta;
+
+            double u,v;
+            if( hasUVs ){
+                u = beta * UVB.x() + gamma * UVC.x() + alpha * UVA.x();
+                v = beta * UVB.y() + gamma * UVC.y() + alpha * UVA.y();
+            }
+            else{
+                u = beta;
+                v = gamma;
+            }
+          
+            intersectionManager.u = u;
+            intersectionManager.v = v;
             
             return true;
+        }
+
+        void setNormals( Vector3 A, Vector3 B, Vector3 C ){
+            NormalA = A;
+            NormalB = B;
+            NormalC = C;
+        }
+
+        void setUVs( Point3 A, Point3 B, Point3 C ){
+            UVA = A;
+            UVB = B;
+            UVC = C;
+
+            hasUVs = true;
         }
 
     private:
@@ -85,9 +117,19 @@ class Triangle : public shape2D {
         shared_ptr< Material > material;
         AABB boundingBox;
 
-        Vector3 normal;
-        Vector3 normalizedNormal;
+        Vector3 faceNormal;
+        Vector3 faceNormalizedNormal;
         Vector3 AB, AC, BC;
+
+        Vector3 NormalA;
+        Vector3 NormalB;
+        Vector3 NormalC;
+
+        Point3 UVA;
+        Point3 UVB;
+        Point3 UVC;
+
+        bool hasUVs;
         
         double D;
         double denom;
