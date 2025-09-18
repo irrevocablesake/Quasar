@@ -75,6 +75,10 @@ class Triangle : public shape2D {
             return true;
         }
 
+        int getCount() const override{
+            return 1;
+        }
+
         bool inShape( double alpha, double beta, IntersectionManager &intersectionManager ) const override {
             if( alpha < 0 || beta < 0 || alpha + beta > 1 ){
                 return false;

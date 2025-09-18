@@ -83,6 +83,10 @@ class Sphere : public Primitive {
             return true;
         }
 
+        int getCount() const override{
+            return 1;
+        }
+
         private:
             static void getSphereUV( const Vector3 &normal, double &u, double &v ){
                 auto theta = std::acos( -normal.y() );

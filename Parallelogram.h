@@ -77,6 +77,10 @@ class Parallelogram : public shape2D {
             return true;
         }
 
+        int getCount() const override{
+            return 1;
+        }
+
     private:
         Point3 Q;
         Vector3 u, v;
