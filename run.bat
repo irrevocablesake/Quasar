@@ -1,1 +1,1 @@
-program > image.ppm
+program
