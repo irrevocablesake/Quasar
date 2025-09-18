@@ -42,6 +42,10 @@ public:
         return BLAS.raycast( ray, interval, intersectionManager );
     }
 
+    int getCount() const override{
+        return BLAS.getCount();
+    }
+
 private:
     World BLAS;
 };

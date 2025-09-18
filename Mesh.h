@@ -13,6 +13,7 @@ class Mesh {
         virtual ~Mesh() = default;
         virtual bool hit( const Ray &ray, Interval interval, IntersectionManager &intersectionManager ) const = 0;
         virtual AABB getBoundingBox() const = 0;
+        virtual int getCount() const = 0;
 };
 
 class Primitive : public Mesh {
