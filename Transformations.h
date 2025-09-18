@@ -33,6 +33,10 @@ class Translate : public Mesh {
             return boundingBox;
         }
 
+        int getCount() const override{
+            return mesh -> getCount();
+        }
+
     private:
         shared_ptr< Mesh > mesh;
         Vector3 offset;
@@ -110,6 +114,10 @@ class RotateY : public Mesh {
             return true;
         }
 
+        int getCount() const override{
+            return mesh -> getCount();
+        }
+
         AABB getBoundingBox() const override {
             return boundingBox;
         }
@@ -155,6 +163,10 @@ class RotateX : public Mesh {
             }
 
             boundingBox = AABB( min, max );
+        }
+
+        int getCount() const override{
+            return mesh -> getCount();
         }
 
         bool hit( const Ray &ray, Interval interval, IntersectionManager &intersectionManager ) const override {

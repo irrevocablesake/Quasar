@@ -51,6 +51,15 @@ class World{
             return boundingBox;
         }
 
+        int getCount() const {
+            int total = 0;
+            for( auto &mesh : meshList ){
+                total = total + mesh -> getCount();
+            }
+
+            return total;
+        }
+
     private:
         AABB boundingBox;
 };

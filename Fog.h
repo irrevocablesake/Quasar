@@ -67,6 +67,10 @@ class Fog : public Mesh {
             return boundary -> getBoundingBox();
         }
 
+        int getCount() const override{
+            return boundary -> getCount();
+        }
+
     private:
         shared_ptr< Mesh > boundary;
         double inverseDensity;
