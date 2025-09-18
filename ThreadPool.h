@@ -35,7 +35,7 @@ public:
 
     void displayThread()
     {
-        sf::RenderWindow window(sf::VideoMode::getDesktopMode(), ("Render"));
+        sf::RenderWindow window(sf::VideoMode::getDesktopMode(), ("Quasar - RayTracing Engine"));
         window.setPosition(sf::Vector2i(0, 0));
 
         sf::Texture texture({(unsigned int)image->width, (unsigned int)image->height});
