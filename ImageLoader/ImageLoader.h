@@ -2,6 +2,7 @@
 #define IMAGELOADER_H
 
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_STATIC
 #define STBI_FAILURE_USERMSG
 #include "stb_image.h"
 
@@ -25,7 +26,7 @@ class ImageLoader {
             if( imageDirectory && load( string( imageDirectory ) + "/" + filename )) return;
             if( load("images/" + filename )) return;
 
-            std::cerr << "ERROR: Could not load image file '" << filename << "'.\n";
+            std::clog << "ERROR: Could not load image file '" << filename << "'.\n";
         }
 
         ~ImageLoader() {
