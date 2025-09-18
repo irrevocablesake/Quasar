@@ -34,17 +34,17 @@ class Viewport {
             return degrees * PI / 180.0;
         }
 
-        Viewport( const Image &image, Camera &camera ) {
+        Viewport( Image *image, Camera &camera ){
             double theta = degreesToRadians( camera.vFOV );
             double h = std::tan( theta / 2 );
             height = 2 * h * camera.focusDistance;
-            width = height * ( double ( image.width ) / image.height );
+            width = height * ( double ( image -> width ) / image  -> height );
 
             widthVector = width * camera.u;
             heightVector = height * -camera.v;
 
-            pixelDeltaWidth = widthVector / image.width;
-            pixelDeltaHeight = heightVector / image.height;
+            pixelDeltaWidth = widthVector / image  -> width;
+            pixelDeltaHeight = heightVector / image  -> height;
 
             topLeftCorner = camera.position - (camera.focusDistance * camera.w ) - widthVector / 2 - heightVector / 2;
 

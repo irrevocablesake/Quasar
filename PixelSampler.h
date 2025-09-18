@@ -1,6 +1,8 @@
 #ifndef PIXELSAMPLER_H
 #define PIXELSAMPLER_H
 
+#include <cstdint>
+
 #include "Vector3.h"
 #include "Point3.h"
 #include "Ray.h"
@@ -19,6 +21,7 @@ class PixelSampler{
         int samplesPerPixel;
         int maxDepth;
         Color3 background;
+        Image *image;
 
     public:
         double average;
@@ -26,7 +29,7 @@ class PixelSampler{
         Camera camera;
 
         PixelSampler() {} 
-        PixelSampler( Camera &camera, Viewport &viewport, int samplesPerPixel, int maxDepth, Color3 &background ) : camera( camera ), viewport( viewport ), samplesPerPixel( samplesPerPixel ), maxDepth( maxDepth ), background( background ) {
+        PixelSampler( Camera &camera, Viewport &viewport, int samplesPerPixel, int maxDepth, Color3 &background, Image *image ) : camera( camera ), viewport( viewport ), samplesPerPixel( samplesPerPixel ), maxDepth( maxDepth ), background( background ), image( image ) {
             average = 1 / double( samplesPerPixel );
         }
 
@@ -34,7 +37,36 @@ class PixelSampler{
         Vector3 sample();
         
         Color3 processPixelColor( Ray &ray, World &world, int maxDepth );
+        void writePixelColor(const Color3 &pixelColor, int i, int j );
 };
+
+inline double linearToGamma(double linearComponent)
+{
+    if (linearComponent > 0)
+    {
+        return std::sqrt(linearComponent);
+    }
+
+    return 0;
+}
+
+void PixelSampler::writePixelColor(const Color3 &pixelColor, int i, int j )
+{
+    double rNormalized = pixelColor.r();
+    double gNormalized = pixelColor.g();
+    double bNormalized = pixelColor.b();
+
+    double rGammaCorrected = linearToGamma(rNormalized);
+    double gGammaCorrected = linearToGamma(gNormalized);
+    double bGammaCorrected = linearToGamma(bNormalized);
+
+    static const Interval intensity(0.000, 1.000);
+    std::uint8_t rChannel = ( std::uint8_t ) 255 * intensity.clamp(rGammaCorrected);
+    std::uint8_t gChannel = ( std::uint8_t ) 255 * intensity.clamp(gGammaCorrected);
+    std::uint8_t bChannel = ( std::uint8_t ) 255 * intensity.clamp(bGammaCorrected);
+
+    image -> setPixel(i, j, rChannel, gChannel, bChannel);
+}
 
 Color3 PixelSampler::processPixelColor( Ray &ray, World &world, int maxDepth ){
 
@@ -74,21 +106,6 @@ Color3 PixelSampler::processPixelColor( Ray &ray, World &world, int maxDepth ){
     }
 
     return background;
-
-    //--
-
-    // if( !hit ) return background;
-
-    // Ray scattered;
-    // Color3 attenuation;
-    // Color3 emittedColor = intersectionManager.material -> emitted( intersectionManager.u, intersectionManager.v, intersectionManager.point );
-
-    // if( !intersectionManager.material -> scatter( ray, attenuation, scattered, intersectionManager ) ) return emittedColor;
-
-    // Color3 value = processPixelColor( scattered, world, maxDepth - 1 );
-    // Color3 scatteredColor = attenuation * value;
-
-    // return emittedColor + scatteredColor;
 }
 
 Vector3 PixelSampler::sample() {
@@ -108,6 +125,7 @@ Color3 PixelSampler::samplePixel( int i, int j, World &world ){
         Ray ray( origin, ( pixelSample - origin ), rayTime );
 
         pixelColor += processPixelColor( ray, world, maxDepth );
+        writePixelColor(pixelColor * ( 1.0 / ( float ) ( count + 1 ) ), j, i );
     }
 
     return ( pixelColor * average );

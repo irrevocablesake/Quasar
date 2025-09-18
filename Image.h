@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cstdint>
 #include "Color3.h"
 
 using std::vector;
@@ -14,10 +15,10 @@ public:
 
     int width;
     int height;
-    vector<vector<Color3>> pixels;
+    vector<std::uint8_t> pixels;
 
     Image() : width(640), height(480), aspectRatio(double(16.0) / double(9.0)) {
-        pixels = vector< vector< Color3 >> ( height, vector< Color3 >( width ));
+        pixels = vector< std::uint8_t> ( width * height * 4.0, 0 );
     }
     Image(const int &width, const double &aspectRatio) : width(width), aspectRatio(aspectRatio)
     {
@@ -28,7 +29,7 @@ public:
 
         this->height = width / aspectRatio;
 
-        pixels = vector< vector< Color3 >> ( this->height, vector< Color3 >( width ));
+        pixels = vector< std::uint8_t> ( this->height * width * 4.0, 0 );
 
         if (this->height < 1)
         {
@@ -36,33 +37,13 @@ public:
         }
     }
 
-    void setPixel(int x, int y, Color3 pixelColor)
+    void setPixel(int x, int y, std::uint8_t r, std::uint8_t g, std::uint8_t b)
     {
-        pixels[x][y] = pixelColor;
-    }
-
-    Color3 getPixel(int x, int y)
-    {
-        return pixels[x][y];
-    }
-
-    void render()
-    {
-        std::clog << "\n\nGenerating Image...\n";
-
-        std::cout << "P3\n"
-                  << width << ' ' << height << '\n'
-                  << "255\n";
-
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                Color3 pixelColor = getPixel( i, j );
-                std::cout << pixelColor.r() << ' ' << pixelColor.g() << ' ' << pixelColor.b() << '\n';
-            }
-            std::clog << "\rProgress: " << int( ( i / float( height - 1 ) ) * 100 ) << " %   " << std::flush;
-        }
+        int index = ( y * width + x ) * 4;
+        pixels[ index + 0 ] = r;
+        pixels[ index + 1 ] = g;
+        pixels[ index + 2 ] = b;
+        pixels[ index + 3 ] = 255;
     }
 };
 
