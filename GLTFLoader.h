@@ -25,7 +25,7 @@ class GLTFLoader {
     public:
         GLTFLoader(){ }
 
-        void loadFile( string filePath, bool useMetal, double metalFactor ){
+        void loadFile( string filePath ){
             scene = importer.ReadFile( filePath, 0 );
             if( !scene || !( scene -> HasMeshes() ) ){
                 std::clog << "ASSIMP Error:: No Scene or Meshes Found \n";
@@ -35,38 +35,23 @@ class GLTFLoader {
                 aiMesh *mesh = scene -> mMeshes[ i ];
                 aiMaterial *material = scene -> mMaterials[ mesh -> mMaterialIndex ];
 
-                std::shared_ptr< Material > baseMaterial = std::make_shared< Diffuse >( Color3( 1.0, 1.0, 1.0 ) );
+                std::shared_ptr< Material > baseMaterial = std::make_shared< Diffuse >( Color3( 0.0, 0.0, 1.0 ) );
                 std::shared_ptr< ImageTexture > imageTexture = nullptr;
 
-                if( material -> GetTextureCount( aiTextureType_DIFFUSE ) > 0 ){
-                    aiString texturePath;
+                aiColor4D diffuseColor;
+                double roughnessFactor;
 
-                    if( material -> GetTexture( aiTextureType_DIFFUSE, 0, &texturePath ) == AI_SUCCESS ){
-                        const aiTexture *texture = scene -> GetEmbeddedTexture( texturePath.C_Str() );
-                        if( texture ){
-                            if( texture -> mHeight == 0){
-                                imageTexture = make_shared< ImageTexture >( ( unsigned char* ) texture -> pcData, texture -> mWidth );
-                                if( useMetal ){
-                                    baseMaterial = std::make_shared< Metal >( imageTexture, metalFactor );
-                                }
-                                else{
-                                    baseMaterial = std::make_shared< Diffuse >( imageTexture );
-                                }
-                            }
-                        }
-                    }
+                aiReturn verdictDiffuse;
+                aiReturn verdictRoughness;
+                verdictDiffuse = material->Get( AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
+                verdictRoughness = material->Get( AI_MATKEY_ROUGHNESS_FACTOR, roughnessFactor );
+
+                if( verdictRoughness == AI_FAILURE ){
+                    std::clog << "failure for roughess" << std::endl;
                 }
 
-                if( !imageTexture ){
-                    aiColor4D diffuseColor;
-                    if( material -> Get( AI_MATKEY_COLOR_DIFFUSE, diffuseColor ) == AI_SUCCESS ){
-                        if( useMetal ){
-                            baseMaterial = std::make_shared< Metal >( Color3( diffuseColor.r, diffuseColor.g, diffuseColor.b ), metalFactor );
-                        }
-                        else{
-                            baseMaterial = make_shared< Diffuse >( Color3( diffuseColor.r, diffuseColor.g, diffuseColor.b ) );
-                        }
-                    }
+                if ( verdictDiffuse == AI_SUCCESS ){
+                    baseMaterial = make_shared< DiffuseBRDF >( Color3( diffuseColor.r, diffuseColor.g, diffuseColor.b ), 0.5, 0.5 );
                 }
 
                 for( unsigned int faceIndex = 0; faceIndex < mesh -> mNumFaces; faceIndex++ ){

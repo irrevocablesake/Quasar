@@ -622,7 +622,7 @@ void sceneLoad() {
     lightMesh2 = make_shared< Translate >( lightMesh2, Vector3( 0, 0, -10 ));
     world.add( lightMesh2 );
     
-    auto suzanee = make_shared< LoadedMesh >("./models/highPolySmoothShadedSuzanne.glb", true, 0.6 );
+    auto suzanee = make_shared< LoadedMesh >("./models/highPolySmoothShadedSuzanne.glb" );
     world.add( suzanee );
 
     auto floor = make_shared< Metal >( Color3( 0.6, 0.4, 0.2 ), 0.3 );
@@ -646,9 +646,40 @@ void sceneLoad() {
     renderer.render();
 }
 
+void BRDF() {
+    const int IMAGE_WIDTH = 800;
+    const double ASPECT_RATIO = 1.0;
+    Image image( IMAGE_WIDTH, ASPECT_RATIO );
+
+    World world;
+
+    auto lightMaterial = make_shared< Light >( Color3( 30, 30, 30 ) );
+    auto lightMesh = make_shared< Sphere >( Point3( 3, 3, 3 ), 0.5, lightMaterial );
+    world.add( lightMesh );
+
+    auto suzanne = make_shared< LoadedMesh >( "./models/highPolySmoothShadedSuzanne.glb");
+    // auto suzanne = make_shared< LoadedMesh >("./models/lowPolyFlatShadedSuzanne.glb");
+    world.add( suzanne );
+
+    Renderer renderer( world, image );
+    renderer.samplesPerPixel = 1000;
+    renderer.maxDepth = 30;
+    renderer.vFOV = 23;
+    renderer.lookFrom = Point3( 0, 2.5, 10 );
+    renderer.lookAt = Point3( 0, 0.0, 0 );
+    renderer.vUp = Vector3( 0, 1, 0 );
+    // renderer.background = Color3( 0.53f, 0.81f, 0.92f );
+    renderer.background = Color3( 0, 0, 0 );
+    renderer.defocusAngle = 0;
+    renderer.focusDistance = 10.0;
+    renderer.initialize();
+    renderer.render();
+}
+
+
 int main(){
     
-    int scene = 14;
+    int scene = 15;
 
     switch( scene ){
         case 1: classicScene();  break;
@@ -665,6 +696,7 @@ int main(){
         case 12: BLAS(); break;
         case 13: Triangle1(); break;
         case 14: sceneLoad(); break;
+        case 15: BRDF(); break;
     }
     
     return 0;

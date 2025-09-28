@@ -122,7 +122,7 @@ Color3 PixelSampler::samplePixel( int i, int j, World &world ){
         Point3 origin = ( camera.defocusAngle <= 0 ) ? camera.position : camera.defocusDiskSample();
         double rayTime = generateRandomNumber();
         
-        Ray ray( origin, ( pixelSample - origin ), rayTime );
+        Ray ray( origin, unitVector( pixelSample - origin ), rayTime );
 
         pixelColor += processPixelColor( ray, world, maxDepth );
         writePixelColor(pixelColor * ( 1.0 / ( float ) ( count + 1 ) ), j, i );

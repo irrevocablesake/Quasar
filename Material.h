@@ -9,6 +9,7 @@
 #include "Texture.h"
 
 #include<optional>
+#include<cmath>
 
 class Material {
     public:
@@ -185,5 +186,94 @@ class Isotropic : public Material {
     private:
         shared_ptr< Texture > texture;
 };
+
+class DiffuseBRDF : public Material{
+    public:
+        DiffuseBRDF( Color3 albedo, double roughness, double subsurface ) : texture( make_shared< solidColor >( albedo ) ), roughnessParam( roughness ), subsurfaceParam( subsurface ) {}
+
+        Vector3 reflected() const{
+           return generateRandomUnitVector();
+        }
+
+        double fresnelGrazingAngle( Vector3 incomingDirection, Vector3 outgoingDirection ) const{
+            Vector3 halfVector = unitVector( incomingDirection + outgoingDirection );
+            double approximation = 0.5 + 2 * roughnessParam * ( std::pow( std::abs( dot( halfVector, outgoingDirection )) , 2) );
+            return approximation;
+        }
+
+        double subsurfaceGrazingAngle( Vector3 incomingDirection, Vector3 outgoingDirection ) const {
+            Vector3 halfVector = unitVector( incomingDirection + outgoingDirection );
+            double approximation = roughnessParam * std::pow( std::abs( dot( halfVector, outgoingDirection )), 2 );
+            
+            return approximation;
+        }
+
+        double calculateFresnel( Vector3 normal, Vector3 direction, double grazingApproximation ) const{
+            double approximation = 1 + ( grazingApproximation - 1 ) * ( 1 - ( std::pow( std::abs( dot( normal, direction ) ) , 5)));
+            return approximation;
+        }
+
+        double calculateSubSurface( Vector3 normal, Vector3 direction, double grazinApproximation ) const {
+            double approximation = 1 + ( grazinApproximation - 1 ) * ( 1 - std::pow( std::abs( dot( normal, direction )), 5));
+            return approximation;
+        }
+
+        double fresnelEffect( Vector3 normal, Vector3 incomingDirection, Vector3 outgoingDirection ) const{
+            double grazingApproximation = fresnelGrazingAngle( incomingDirection, outgoingDirection );
+
+            double approximation = calculateFresnel( normal, incomingDirection, grazingApproximation ) * calculateFresnel( normal, outgoingDirection, grazingApproximation ) * std::abs( dot( normal, outgoingDirection ) );
+            return approximation; 
+        }
+
+        double subSurfaceEffect( Vector3 normal, Vector3 incomingDirection, Vector3 outgoingDirection ) const {
+            double grazingApproximation = subsurfaceGrazingAngle( incomingDirection, outgoingDirection );
+            
+            double approximation = calculateSubSurface( normal, incomingDirection, grazingApproximation ) * calculateSubSurface( normal, outgoingDirection, grazingApproximation );
+            return approximation;
+        }
+
+        Color3 evaluate( IntersectionManager &intersectionManager,  const Vector3 &incomingDirection, Vector3 outgoingDirection ) const {
+            Color3 albedo = texture -> value( intersectionManager.u, intersectionManager.v, intersectionManager.point );
+            
+            Color3 baseDiffuse = ( albedo / PI ) * fresnelEffect( intersectionManager.normal, incomingDirection, outgoingDirection );
+            Color3 subSurface = ( ( 1.25 * albedo ) / PI ) * ( subSurfaceEffect( intersectionManager.normal, incomingDirection, outgoingDirection ) * ( ( 1 / ( std::abs( dot( intersectionManager.normal, incomingDirection ) ) + std::abs( dot( intersectionManager.normal, outgoingDirection )) )) -0.5 ) + 0.5 ) * std::abs( dot( intersectionManager.normal, outgoingDirection ));
+
+            Color3 diffuse = ( 1 - subsurfaceParam ) * baseDiffuse + subsurfaceParam * subSurface;
+
+            return subSurface;
+        }
+
+        double getPDF( Vector3 normal, Vector3 outDirection ) const {
+            return std::max( dot( normal, outDirection ), 1e-6 )/ PI;
+        }
+
+        Vector3 sample( Vector3 normal ) const {
+            Vector3 outDirection = unitVector( normal + reflected() );
+            return outDirection;
+        }
+
+        bool scatter( const Ray &ray, Color3 &attenuation, Ray &scattered, IntersectionManager &intersectionManager ) const override {
+            Vector3 sampleDirection = sample( intersectionManager.normal );
+            if( sampleDirection.nearZero() ){
+                sampleDirection = intersectionManager.normal;
+            }
+
+            Color3 evaluateBRDF = evaluate( intersectionManager, ray.direction(), sampleDirection );
+            double pdf = getPDF( intersectionManager.normal, sampleDirection );
+
+            scattered = Ray( intersectionManager.point, sampleDirection, ray.time() );
+            attenuation = evaluateBRDF * dot( intersectionManager.normal, sampleDirection ) / pdf;
+
+            return true;
+        }
+    
+    private:
+        shared_ptr< Texture > texture;
+
+    public:
+        double roughnessParam;
+        double subsurfaceParam;
+};
+
 
 #endif
