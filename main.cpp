@@ -687,41 +687,8 @@ void brickWallNormalMapping() {
     auto lightMesh = make_shared< Sphere >( Point3( 0, 1, 0 ), 0.1, lightMaterial );
     world.add( lightMesh );
 
-    // auto brickWall = make_shared< LoadedMesh >( "./models/brickWall/model.glb");
-    // auto brickWall = make_shared< LoadedMesh >( "./models/brickWall/hmm.glb");
     auto brickWall = make_shared<LoadedMesh>("./models/untitled.glb");
-
     world.add( brickWall );
-
-    // auto diffuseTexture = make_shared< ImageTexture >("brickwall_normal.jpg");
-    // auto normalTexture = make_shared< ImageTexture >("brickwall.jpg");
-
-    // MaterialProperties properties;
-    // properties.diffuseColor = Color3( 1,1,1 );
-    // properties.roughnessFactor = 0.0;
-
-    // properties.diffuseTexture = diffuseTexture;
-    // properties.normalTexture = normalTexture;
-
-    // std::shared_ptr< Material > material = std::make_shared< DisneyBRDF >( properties );
-    //     std::shared_ptr< Material > material = std::make_shared< Diffuse >( Color3( 1,1,1) );
-
-    // auto triangleOne = std::make_shared< Triangle >(
-    //     Point3( -1, 0, 1 ),
-    //     Point3( 1, 0, 1 ),
-    //     Point3( 1, 0, -1 ),
-    //     material
-    // );
-
-    // auto triangleTwo = std::make_shared< Triangle >(
-    //     Point3( -1, 0, 1 ),
-    //     Point3( 1, 0, -1 ),
-    //     Point3(  -1, 0, -1 ),
-    //     material
-    // );
-
-    // world.add( triangleOne );
-    // world.add( triangleTwo );
 
     Renderer renderer( world, image );
     renderer.samplesPerPixel = 1000;
