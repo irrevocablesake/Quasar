@@ -68,7 +68,7 @@ class Triangle : public shape2D {
             }
 
             Color3 rgbNormal = material -> getNormalTexture() -> value( intersectionManager.u, intersectionManager.v, intersectedPoint );
-            Vector3 worldNormal =  unitVector( Vector3( rgbNormal.r(), rgbNormal.b(), rgbNormal.g() ) * 2.0 - 1.0 ) ;
+            Vector3 worldNormal =  unitVector( Vector3( rgbNormal.r(), rgbNormal.g(), rgbNormal.b() ) * 2.0 - 1.0 ) ;
 
             Vector3 edge1 = B - A;
             Vector3 edge2 = C - A;
