@@ -74,6 +74,9 @@ class ImageTexture : public Texture {
 
     private:
         ImageLoader image;
+
+    public:
+        bool loaded = false;
 };
 
 class PerlinTexture : public Texture {
