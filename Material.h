@@ -273,34 +273,14 @@ class DiffuseBRDF : public Material{
         }
 
         Vector3 sample( Vector3 normal, Vector3 shadingNormal ) const {
-            // if(dot(Ns, Ng) < 0){
-            //     // std::cout << "first" << std::endl;
-            //     Ns = -Ns;
-            // } 
+            if(dot( shadingNormal, normal) < 0){
+                shadingNormal = -shadingNormal;
+            } 
 
-            Vector3 scatterDir = unitVector( normal + reflected() );
-            // Vector3 scatterDir = shadingNormal;
-            // if(dot(scatterDir, Ng) < 0) {
-            //     // std::cout << "second" << std::endl;
-            //     scatterDir = Ns;
-            // }
-            // // Vector3 outDirection = unitVector( normal + reflected() );
-            // return scatterDir;
-
-            // if( dot( shadingNormal, normal ) < 0 ){
-            //     shadingNormal = -shadingNormal;
-            // }
-
-            // if( dot( shadingNormal, normal ) < 0 ){
-            //     shadingNormal = -shadingNormal;
-            // }
-
-            // Vector3 scatterDir = generateRandomUnitHemisphereVector( shadingNormal );
-            // if( dot( scatterDir, normal ) < 0 ){
-            //     scatterDir = shadingNormal + reflected();
-            // }
-            // scatterDir = unitVector(scatterDir);
-
+            Vector3 scatterDir = unitVector( shadingNormal + reflected() );
+            if(dot(scatterDir, normal) < 0) {
+                scatterDir = shadingNormal;
+            }
             return scatterDir;
         }
 
@@ -314,8 +294,8 @@ class DiffuseBRDF : public Material{
             double pdf = getPDF( intersectionManager.normal, sampleDirection );
 
             scattered = Ray( intersectionManager.point, sampleDirection, ray.time() );
-            attenuation = evaluateBRDF * dot( intersectionManager.shadingNormal, sampleDirection ) / pdf;
-            // attenuation = texture->value(intersectionManager.u, intersectionManager.v, intersectionManager.point);
+            // attenuation = evaluateBRDF * dot( intersectionManager.shadingNormal, sampleDirection ) / pdf;
+            attenuation = texture->value(intersectionManager.u, intersectionManager.v, intersectionManager.point);
             return true;
         }
     

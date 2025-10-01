@@ -97,7 +97,6 @@ class Triangle : public shape2D {
             );
 
             transformedNormal = unitVector( transformedNormal );
-            transformedNormal = Vector3( transformedNormal.x(), transformedNormal.y(), transformedNormal.z() );
 
             intersectionManager.t = t;
             intersectionManager.point = intersectedPoint;
