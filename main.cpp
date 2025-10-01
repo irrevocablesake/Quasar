@@ -684,7 +684,7 @@ void brickWallNormalMapping() {
     World world;
 
     auto lightMaterial = make_shared< Light >( Color3( 300, 300, 300 ) );
-    auto lightMesh = make_shared< Sphere >( Point3( 0, 1, 0 ), 0.1, lightMaterial );
+    auto lightMesh = make_shared< Sphere >( Point3( 0, 0.7, 0 ), 0.1, lightMaterial );
     world.add( lightMesh );
 
     auto brickWall = make_shared<LoadedMesh>("./models/untitled.glb");
