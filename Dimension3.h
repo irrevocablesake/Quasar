@@ -101,6 +101,12 @@ inline dimensionType operator*( double t, const dimensionType &dimension ){
 }
 
 template<typename dimensionType>
+requires ( !std::same_as< dimensionType, Color3 > )
+inline dimensionType operator-( const dimensionType &dimension, double t ){
+   return dimensionType( dimension.x() - t, dimension.y() - t,  dimension.z() -t );
+}
+
+template<typename dimensionType>
 inline dimensionType operator*(  const dimensionType &dimension, double t ){
    return t * dimension;
 }
