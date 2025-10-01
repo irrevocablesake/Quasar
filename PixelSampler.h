@@ -86,10 +86,22 @@ Color3 PixelSampler::processPixelColor( Ray &ray, World &world, int maxDepth ){
 
         if (dynamic_cast<Normal*>(intersectionManager.material.get()) ) {
             return 0.5 * Color3(
-                intersectionManager.normal.x() + 1,
-                intersectionManager.normal.y() + 1,
-                intersectionManager.normal.z() + 1
+                intersectionManager.shadingNormal.x() + 1,
+                intersectionManager.shadingNormal.z() + 1,
+                intersectionManager.shadingNormal.y() + 1
             );
+
+            // return Color3(
+            //     std::abs( intersectionManager.shadingNormal.x() ),
+            //     std::abs( intersectionManager.shadingNormal.y() ),
+            //     std::abs( intersectionManager.shadingNormal.z() )
+            // );
+
+            // return 0.5 * Color3(
+            //     intersectionManager.normal.x() + 1,
+            //     intersectionManager.normal.z() + 1,
+            //     intersectionManager.normal.y() + 1
+            // );
         }
 
         Ray scattered;

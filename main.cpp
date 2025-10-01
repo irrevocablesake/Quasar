@@ -676,10 +676,70 @@ void BRDF() {
     renderer.render();
 }
 
+void brickWallNormalMapping() {
+    const int IMAGE_WIDTH = 800;
+    const double ASPECT_RATIO = 1.0;
+    Image image( IMAGE_WIDTH, ASPECT_RATIO );
+
+    World world;
+
+    auto lightMaterial = make_shared< Light >( Color3( 300, 300, 300 ) );
+    auto lightMesh = make_shared< Sphere >( Point3( 0, 1, 0 ), 0.1, lightMaterial );
+    world.add( lightMesh );
+
+    // auto brickWall = make_shared< LoadedMesh >( "./models/brickWall/model.glb");
+    // auto brickWall = make_shared< LoadedMesh >( "./models/brickWall/hmm.glb");
+    auto brickWall = make_shared<LoadedMesh>("./models/untitled.glb");
+
+    world.add( brickWall );
+
+    // auto diffuseTexture = make_shared< ImageTexture >("brickwall_normal.jpg");
+    // auto normalTexture = make_shared< ImageTexture >("brickwall.jpg");
+
+    // MaterialProperties properties;
+    // properties.diffuseColor = Color3( 1,1,1 );
+    // properties.roughnessFactor = 0.0;
+
+    // properties.diffuseTexture = diffuseTexture;
+    // properties.normalTexture = normalTexture;
+
+    // std::shared_ptr< Material > material = std::make_shared< DisneyBRDF >( properties );
+    //     std::shared_ptr< Material > material = std::make_shared< Diffuse >( Color3( 1,1,1) );
+
+    // auto triangleOne = std::make_shared< Triangle >(
+    //     Point3( -1, 0, 1 ),
+    //     Point3( 1, 0, 1 ),
+    //     Point3( 1, 0, -1 ),
+    //     material
+    // );
+
+    // auto triangleTwo = std::make_shared< Triangle >(
+    //     Point3( -1, 0, 1 ),
+    //     Point3( 1, 0, -1 ),
+    //     Point3(  -1, 0, -1 ),
+    //     material
+    // );
+
+    // world.add( triangleOne );
+    // world.add( triangleTwo );
+
+    Renderer renderer( world, image );
+    renderer.samplesPerPixel = 1000;
+    renderer.maxDepth = 30;
+    renderer.vFOV = 23;
+    renderer.lookFrom = Point3( 0, 2.5, 5 );
+    renderer.lookAt = Point3( 0, 0.0, 0 );
+    renderer.vUp = Vector3( 0, 1, 0 );
+    renderer.background = Color3( 0, 0, 0 );
+    renderer.defocusAngle = 0;
+    renderer.focusDistance = 10.0;
+    renderer.initialize();
+    renderer.render();
+}
 
 int main(){
     
-    int scene = 15;
+    int scene = 16;
 
     switch( scene ){
         case 1: classicScene();  break;
@@ -697,6 +757,7 @@ int main(){
         case 13: Triangle1(); break;
         case 14: sceneLoad(); break;
         case 15: BRDF(); break;
+        case 16: brickWallNormalMapping(); break;
     }
     
     return 0;
