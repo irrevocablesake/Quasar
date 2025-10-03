@@ -13,10 +13,10 @@
 
 struct MaterialProperties {
     Color3 diffuseColor;
-    shared_ptr< ImageTexture > diffuseTexture;
-    shared_ptr< ImageTexture > normalTexture;
+    shared_ptr< Texture > diffuseTexture;
+    shared_ptr< Texture > normalTexture;
     float roughnessFactor;
-    float subSurfaceFactor = 0;
+    float subSurfaceFactor;
 };
 
 class Material {
@@ -31,7 +31,7 @@ class Material {
             return Color3( 0, 0, 0 );
         }
 
-        virtual shared_ptr<ImageTexture> getNormalTexture() const { 
+        virtual shared_ptr<Texture> getNormalTexture() const { 
             return nullptr; 
         }
 };
@@ -39,19 +39,12 @@ class Material {
 class Normal : public Material {
     public:
         Normal() {}
-        Normal( MaterialProperties properties ) {
-            this -> properties = properties;
-        }
 
         bool scatter( const Ray &ray, Color3 &attenuation, Ray &scattered, IntersectionManager &intersectionManager ) const override {
             scattered = Ray( intersectionManager.point, intersectionManager.normal, ray.time() );
             attenuation = 0.5 * Color3( scattered.direction().x() + 1, scattered.direction().y() + 1, scattered.direction().z() + 1 );
         
             return false;
-        }
-
-        shared_ptr<ImageTexture> getNormalTexture() const {
-            return properties.normalTexture;
         }
 
     private:
@@ -213,8 +206,9 @@ class Isotropic : public Material {
 class DiffuseBRDF : public Material{
     public:
         DiffuseBRDF() {}
-        DiffuseBRDF( Color3 albedo, double roughness, double subsurface ) : texture( make_shared< solidColor >( albedo ) ), roughnessParam( roughness ), subsurfaceParam( subsurface ) {}
-        DiffuseBRDF( shared_ptr< ImageTexture > texture, double roughness, double subsurface ) : texture( texture), roughnessParam( roughness ), subsurfaceParam( subsurface ) {}
+        DiffuseBRDF( MaterialProperties properties ){
+            this -> properties = properties;
+        }
 
         Vector3 reflected() const{
            return generateRandomUnitVector();
@@ -222,13 +216,13 @@ class DiffuseBRDF : public Material{
 
         double fresnelGrazingAngle( Vector3 incomingDirection, Vector3 outgoingDirection ) const{
             Vector3 halfVector = unitVector( incomingDirection + outgoingDirection );
-            double approximation = 0.5 + 2 * roughnessParam * ( std::pow( std::abs( dot( halfVector, outgoingDirection )) , 2) );
+            double approximation = 0.5 + 2 * properties.roughnessFactor * ( std::pow( std::abs( dot( halfVector, outgoingDirection )) , 2) );
             return approximation;
         }
 
         double subsurfaceGrazingAngle( Vector3 incomingDirection, Vector3 outgoingDirection ) const {
             Vector3 halfVector = unitVector( incomingDirection + outgoingDirection );
-            double approximation = roughnessParam * std::pow( std::abs( dot( halfVector, outgoingDirection )), 2 );
+            double approximation = properties.roughnessFactor * std::pow( std::abs( dot( halfVector, outgoingDirection )), 2 );
             
             return approximation;
         }
@@ -258,12 +252,12 @@ class DiffuseBRDF : public Material{
         }
 
         Color3 evaluate( IntersectionManager &intersectionManager,  const Vector3 &incomingDirection, Vector3 outgoingDirection ) const {
-            Color3 albedo = texture -> value( intersectionManager.u, intersectionManager.v, intersectionManager.point );
+            Color3 albedo = properties.diffuseTexture -> value( intersectionManager.u, intersectionManager.v, intersectionManager.point );
             
-            Color3 baseDiffuse = ( albedo / PI ) * fresnelEffect( intersectionManager.normal, incomingDirection, outgoingDirection );
-            Color3 subSurface = ( ( 1.25 * albedo ) / PI ) * ( subSurfaceEffect( intersectionManager.normal, incomingDirection, outgoingDirection ) * ( ( 1 / ( std::abs( dot( intersectionManager.normal, incomingDirection ) ) + std::abs( dot( intersectionManager.normal, outgoingDirection )) )) -0.5 ) + 0.5 ) * std::abs( dot( intersectionManager.normal, outgoingDirection ));
+            Color3 baseDiffuse = ( albedo / PI ) * fresnelEffect( intersectionManager.shadingNormal, incomingDirection, outgoingDirection );
+            Color3 subSurface = ( ( 1.25 * albedo ) / PI ) * ( subSurfaceEffect( intersectionManager.shadingNormal, incomingDirection, outgoingDirection ) * ( ( 1 / ( std::abs( dot( intersectionManager.shadingNormal, incomingDirection ) ) + std::abs( dot( intersectionManager.shadingNormal, outgoingDirection )) )) -0.5 ) + 0.5 ) * std::abs( dot( intersectionManager.shadingNormal, outgoingDirection ));
 
-            Color3 diffuse = ( 1 - subsurfaceParam ) * baseDiffuse + subsurfaceParam * subSurface;
+            Color3 diffuse = ( 1 - properties.subSurfaceFactor ) * baseDiffuse + properties.subSurfaceFactor * subSurface;
 
             return subSurface;
         }
@@ -272,39 +266,32 @@ class DiffuseBRDF : public Material{
             return std::max( dot( normal, outDirection ), 1e-6 )/ PI;
         }
 
-        Vector3 sample( Vector3 normal, Vector3 shadingNormal ) const {
-            if(dot( shadingNormal, normal) < 0){
-                shadingNormal = -shadingNormal;
-            } 
-
+        Vector3 sample( Vector3 normal, Vector3 shadingNormal, bool frontFace ) const {            
             Vector3 scatterDir = unitVector( shadingNormal + reflected() );
-            if(dot(scatterDir, normal) < 0) {
-                scatterDir = shadingNormal;
+            if( !frontFace ){
+                scatterDir = normal;
             }
+
             return scatterDir;
         }
 
         bool scatter( const Ray &ray, Color3 &attenuation, Ray &scattered, IntersectionManager &intersectionManager ) const override {
-            Vector3 sampleDirection = sample( intersectionManager.normal, intersectionManager.shadingNormal );
+            Vector3 sampleDirection = sample( intersectionManager.normal, intersectionManager.shadingNormal, intersectionManager.frontFace );
             if( sampleDirection.nearZero() ){
-                sampleDirection = intersectionManager.normal;
+                sampleDirection = intersectionManager.shadingNormal;
             }
 
             Color3 evaluateBRDF = evaluate( intersectionManager, ray.direction(), sampleDirection );
-            double pdf = getPDF( intersectionManager.normal, sampleDirection );
+            double pdf = getPDF( intersectionManager.shadingNormal, sampleDirection );
 
             scattered = Ray( intersectionManager.point, sampleDirection, ray.time() );
-            // attenuation = evaluateBRDF * dot( intersectionManager.shadingNormal, sampleDirection ) / pdf;
-            attenuation = texture->value(intersectionManager.u, intersectionManager.v, intersectionManager.point);
+            attenuation = evaluateBRDF * dot( intersectionManager.shadingNormal, sampleDirection ) / pdf;
+
             return true;
         }
-    
-    private:
-        shared_ptr< Texture > texture;
 
     public:
-        double roughnessParam;
-        double subsurfaceParam;
+        MaterialProperties properties;
 };
 
 class DisneyBRDF : public Material {
@@ -314,7 +301,7 @@ class DisneyBRDF : public Material {
 
         DisneyBRDF( MaterialProperties properties ) {
             this -> properties = properties;
-            diffuseBRDF = DiffuseBRDF( properties.diffuseTexture, 0, 0 );
+            diffuseBRDF = DiffuseBRDF( properties );
         }
 
         bool scatter(const Ray &ray, Color3 &attenuation, Ray &scattered, IntersectionManager &intersectionManager) const override {
@@ -322,7 +309,7 @@ class DisneyBRDF : public Material {
             return verdict;
         };
 
-        virtual shared_ptr<ImageTexture> getNormalTexture() const { 
+        virtual shared_ptr<Texture> getNormalTexture() const { 
            return properties.normalTexture;
         }
 
