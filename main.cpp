@@ -683,21 +683,29 @@ void brickWallNormalMapping() {
 
     World world;
 
-    auto lightMaterial = make_shared< Light >( Color3( 300, 300, 300 ) );
-    auto lightMesh = make_shared< Sphere >( Point3( 0, 0.7, 0 ), 0.1, lightMaterial );
-    world.add( lightMesh );
+    auto lightMaterial = make_shared< Light >( Color3( 100, 100, 100 ) );
 
-    auto brickWall = make_shared<LoadedMesh>("./models/untitled.glb");
+    auto lightMesh = make_shared< Sphere >( Point3( 1, 1, 1 ), 0.1, lightMaterial );
+    auto lightMesh1 = make_shared<Sphere>(Point3(1, -1, 1), 0.1, lightMaterial);
+    auto lightMesh2 = make_shared<Sphere>(Point3(-1, 1, 1), 0.1, lightMaterial);
+    auto lightMesh3 = make_shared<Sphere>(Point3(-1, -1, 1), 0.1, lightMaterial);
+
+    world.add(lightMesh);
+    world.add(lightMesh1);
+    world.add(lightMesh2);
+    world.add(lightMesh3);
+
+    shared_ptr< Mesh > brickWall = make_shared< LoadedMesh >("./models/brickWall/model.glb");
     world.add( brickWall );
 
     Renderer renderer( world, image );
-    renderer.samplesPerPixel = 1000;
-    renderer.maxDepth = 30;
+    renderer.samplesPerPixel = 500;
+    renderer.maxDepth = 4;
     renderer.vFOV = 23;
-    renderer.lookFrom = Point3( 0, 2.5, 5 );
-    renderer.lookAt = Point3( 0, 0.0, 0 );
+    renderer.lookFrom = Point3( -3, -1, 5 );
+    renderer.lookAt = Point3( 0, 0, 0 );
     renderer.vUp = Vector3( 0, 1, 0 );
-    renderer.background = Color3( 0, 0, 0 );
+    renderer.background = Color3( 0, 0, 0);
     renderer.defocusAngle = 0;
     renderer.focusDistance = 10.0;
     renderer.initialize();
