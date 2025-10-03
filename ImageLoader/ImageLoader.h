@@ -12,6 +12,10 @@
 
 using std::string;
 
+//TODO:
+//separate loadf + load
+//seems liek a good temp solution
+
 class ImageLoader {
     public:
         ImageLoader() {}
@@ -41,7 +45,7 @@ class ImageLoader {
             if( fdata == nullptr ) return false;
 
             bytesPerScanline = imageWidth * bytesPerPixel;
-            convertToBytes();
+            convertToBytes( true );
 
             return true;
         }
@@ -50,12 +54,13 @@ class ImageLoader {
 
             auto n = bytesPerPixel;
 
-            fdata = stbi_loadf_from_memory( data, size, &imageWidth, &imageHeight, &n, bytesPerPixel );
+            cdata = stbi_load_from_memory( data, size, &imageWidth, &imageHeight, &n, bytesPerPixel );
+            
             if( fdata == nullptr ) return false;
 
             bytesPerScanline = imageWidth * bytesPerPixel;
 
-            convertToBytes();
+            convertToBytes( false );
 
             return true;
         }
@@ -81,6 +86,7 @@ class ImageLoader {
     private:
         const int bytesPerPixel = 3;
         float *fdata = nullptr;
+        unsigned char *cdata = nullptr;
         unsigned char *bdata = nullptr;
         int imageWidth = 0;
         int imageHeight = 0;
@@ -102,15 +108,21 @@ class ImageLoader {
             return static_cast< unsigned char >( 256.0 * value );
         }
 
-        void convertToBytes(){
+        void convertToBytes( bool isFloat ){
             int totalBytes = imageWidth * imageHeight * bytesPerPixel;
             bdata = new unsigned char[ totalBytes ];
-
+            
             auto *bptr = bdata;
             auto *fptr = fdata;
+            auto *cptr = cdata;
 
-            for( auto i = 0; i < totalBytes; i++, fptr++, bptr++ ){
-                *bptr = floatToBytes( *fptr );
+            for( auto i = 0; i < totalBytes; i++, fptr++, bptr++, cptr++ ){
+                if( isFloat ){
+                    *bptr = floatToBytes(*fptr);
+                }
+                else{
+                    *bptr = *cptr;
+                }
             }
         }
 };
