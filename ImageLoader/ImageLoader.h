@@ -45,7 +45,8 @@ class ImageLoader {
             if( fdata == nullptr ) return false;
 
             bytesPerScanline = imageWidth * bytesPerPixel;
-            convertToBytes( true );
+            isFloatData = true;
+            convertToBytes(  );
 
             return true;
         }
@@ -56,21 +57,24 @@ class ImageLoader {
 
             cdata = stbi_load_from_memory( data, size, &imageWidth, &imageHeight, &n, bytesPerPixel );
             
-            if( fdata == nullptr ) return false;
+            if( cdata == nullptr ) return false;
 
             bytesPerScanline = imageWidth * bytesPerPixel;
+            isFloatData = false;
 
-            convertToBytes( false );
+            convertToBytes(  );
 
             return true;
         }
 
         int width() const {
-            return ( fdata == nullptr ) ? 0 : imageWidth;
+           if( fdata == nullptr && cdata == nullptr ) return 0;
+           return imageWidth;           
         }
 
         int height() const {
-            return ( fdata == nullptr ) ? 0 : imageHeight;
+            if( fdata == nullptr && cdata == nullptr ) return 0;
+            return imageHeight;
         }
 
         const unsigned char* pixelData( int x, int y ) const {
@@ -91,6 +95,7 @@ class ImageLoader {
         int imageWidth = 0;
         int imageHeight = 0;
         int bytesPerScanline = 0;
+        bool isFloatData = NULL;
 
         static int clamp( int x, int low, int high ){
             if( x < low ) return low;
@@ -108,20 +113,30 @@ class ImageLoader {
             return static_cast< unsigned char >( 256.0 * value );
         }
 
-        void convertToBytes( bool isFloat ){
+        void convertToBytes(){
             int totalBytes = imageWidth * imageHeight * bytesPerPixel;
             bdata = new unsigned char[ totalBytes ];
             
             auto *bptr = bdata;
-            auto *fptr = fdata;
-            auto *cptr = cdata;
 
-            for( auto i = 0; i < totalBytes; i++, fptr++, bptr++, cptr++ ){
-                if( isFloat ){
+            float *fptr = nullptr;
+            unsigned char *cptr = nullptr;
+
+            if( isFloatData ){
+                fptr = fdata;
+            }
+            else{
+                cptr = cdata;
+            }
+
+            for( auto i = 0; i < totalBytes; i++, bptr++ ){
+                if( isFloatData ){
                     *bptr = floatToBytes(*fptr);
+                    fptr++;
                 }
                 else{
                     *bptr = *cptr;
+                    cptr++;
                 }
             }
         }
