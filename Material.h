@@ -17,6 +17,7 @@ struct MaterialProperties {
     shared_ptr< Texture > normalTexture;
     float roughnessFactor;
     float subSurfaceFactor;
+    float normalTextureFactor;
 };
 
 class Material {
@@ -33,6 +34,10 @@ class Material {
 
         virtual shared_ptr<Texture> getNormalTexture() const { 
             return nullptr; 
+        }
+
+        virtual float getNormalTextureFactor() const {
+            return 1.0;
         }
 };
 
@@ -267,7 +272,7 @@ class DiffuseBRDF : public Material{
         }
 
         Vector3 sample( Vector3 normal, Vector3 shadingNormal, bool frontFace ) const {            
-            Vector3 scatterDir = unitVector( shadingNormal + reflected() );
+            Vector3 scatterDir = unitVector( generateRandomUnitHemisphereVector( shadingNormal  ));
             if( !frontFace ){
                 scatterDir = normal;
             }
@@ -278,6 +283,7 @@ class DiffuseBRDF : public Material{
         bool scatter( const Ray &ray, Color3 &attenuation, Ray &scattered, IntersectionManager &intersectionManager ) const override {
             Vector3 sampleDirection = sample( intersectionManager.normal, intersectionManager.shadingNormal, intersectionManager.frontFace );
             if( sampleDirection.nearZero() ){
+                //won't enter here if using hemisphere
                 sampleDirection = intersectionManager.shadingNormal;
             }
 
@@ -309,9 +315,12 @@ class DisneyBRDF : public Material {
             return verdict;
         };
 
-        virtual shared_ptr<Texture> getNormalTexture() const { 
+        shared_ptr<Texture> getNormalTexture() const override { 
            return properties.normalTexture;
         }
 
+        float getNormalTextureFactor() const override {
+            return properties.normalTextureFactor;
+        }
     };
 #endif

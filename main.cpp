@@ -683,26 +683,30 @@ void brickWallNormalMapping() {
 
     World world;
 
-    auto lightMaterial = make_shared< Light >( Color3( 100, 100, 100 ) );
-
+    auto lightMaterial = make_shared<Light>(Color3(180, 180, 180));
     auto lightMesh = make_shared< Sphere >( Point3( 1, 1, 1 ), 0.1, lightMaterial );
-    auto lightMesh1 = make_shared<Sphere>(Point3(1, -1, 1), 0.1, lightMaterial);
-    auto lightMesh2 = make_shared<Sphere>(Point3(-1, 1, 1), 0.1, lightMaterial);
-    auto lightMesh3 = make_shared<Sphere>(Point3(-1, -1, 1), 0.1, lightMaterial);
-
     world.add(lightMesh);
+    
+    auto lightMaterial1 = make_shared<Light>(Color3(100, 100, 100));
+    auto lightMesh1 = make_shared<Sphere>(Point3(1, -1, 1), 0.1, lightMaterial1 );
     world.add(lightMesh1);
+    
+    auto lightMaterial2 = make_shared<Light>(Color3(150, 150, 150));
+    auto lightMesh2 = make_shared<Sphere>(Point3(-1, 1, 1), 0.1, lightMaterial2 );
     world.add(lightMesh2);
+    
+    auto lightMaterial3 = make_shared<Light>(Color3(130, 130, 130));
+    auto lightMesh3 = make_shared<Sphere>(Point3(-1, -1, 1), 0.1, lightMaterial3 );
     world.add(lightMesh3);
 
     shared_ptr< Mesh > brickWall = make_shared< LoadedMesh >("./models/brickWall/model.glb");
     world.add( brickWall );
 
     Renderer renderer( world, image );
-    renderer.samplesPerPixel = 500;
-    renderer.maxDepth = 4;
+    renderer.samplesPerPixel = 1500;
+    renderer.maxDepth = 10;
     renderer.vFOV = 23;
-    renderer.lookFrom = Point3( -3, -1, 5 );
+    renderer.lookFrom = Point3( -3, 0, 5 );
     renderer.lookAt = Point3( 0, 0, 0 );
     renderer.vUp = Vector3( 0, 1, 0 );
     renderer.background = Color3( 0, 0, 0);

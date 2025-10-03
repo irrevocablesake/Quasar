@@ -86,14 +86,13 @@ class Triangle : public shape2D {
             Color3 rawNormal = material -> getNormalTexture() -> value( intersectionManager.u, intersectionManager.v, intersectedPoint );
             Vector3 tangentNormal =  ( Vector3( rawNormal.r(), rawNormal.g(), rawNormal.b() ) * 2.0 - 1.0 ) ;
 
-            double strength = 4.0;
-            tangentNormal = unitVector( Vector3( tangentNormal.x() * strength , tangentNormal.y() * strength , tangentNormal.z() ) );
-
             Vector3 worldNormal = unitVector( Vector3(
                 tangentNormal.x() * tangent.x() + tangentNormal.y() * biTangent.x() + tangentNormal.z() * N.x(),
                 tangentNormal.x() * tangent.y() + tangentNormal.y() * biTangent.y() + tangentNormal.z() * N.y(),
                 tangentNormal.x() * tangent.z() + tangentNormal.y() * biTangent.z() + tangentNormal.z() * N.z()
             ));
+
+            worldNormal = Vector3( worldNormal.x() * material->getNormalTextureFactor(), worldNormal.y() * material -> getNormalTextureFactor(), worldNormal.z() );
 
             intersectionManager.t = t;
             intersectionManager.point = intersectedPoint;
