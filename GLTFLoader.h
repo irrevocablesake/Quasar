@@ -27,8 +27,15 @@ class GLTFLoader {
 
         shared_ptr<ImageTexture> loadTextureMap(aiTextureType type, aiMaterial *material){
             aiString texturePath;
-            aiReturn verdict = material->GetTexture(type, 0, &texturePath);
             shared_ptr<ImageTexture> texture;
+
+            if( material -> GetTextureCount( type ) == 0 ){
+                texture = nullptr;
+                return texture;
+            }
+
+            aiReturn verdict = material->GetTexture(type, 0, &texturePath);
+            
             if (verdict == AI_SUCCESS)
             {
                 const aiTexture *embeddedTexture = scene->GetEmbeddedTexture(texturePath.C_Str());
@@ -38,8 +45,6 @@ class GLTFLoader {
                     {
                         texture = make_shared<ImageTexture>((unsigned char *)embeddedTexture->pcData, embeddedTexture->mWidth);
                         texture->loaded = true;
-
-                        std::cout << "Normal Texture Loaded" << std::endl;
                     }
                 }
             }
@@ -56,7 +61,7 @@ class GLTFLoader {
             if( material->Get(AI_MATKEY_COLOR_DIFFUSE, color) ){
                 return Color3( color.r, color.g, color.b );
             }
-            return Color3( 1.0, 1.0, 1.0 );
+            return Color3( 1, 1, 1 );
         }
 
         float getRoughnessFactor( aiMaterial *material ){
@@ -83,19 +88,19 @@ class GLTFLoader {
 
                 MaterialProperties properties;
 
-                aiColor4D diffuseColor( 1.0, 1.0, 1.0, 1.0 );
-                float roughnessFactor = 0.1;
-
                 properties.diffuseColor = getDiffuseColor(material);
                 properties.roughnessFactor = getRoughnessFactor( material );
-
                 properties.diffuseTexture = loadTextureMap( aiTextureType_DIFFUSE, material );
+                if( properties.diffuseTexture == nullptr ){
+                    properties.diffuseTexture = make_shared< solidColor >( properties.diffuseColor );
+                }
                 properties.normalTexture = loadTextureMap( aiTextureType_NORMALS, material );
+                if( properties.normalTexture == nullptr ){
+                    properties.normalTexture = make_shared< solidColor>( Color3( 0.5, 0.5, 1.0 ) );
+                }
 
-                // std::shared_ptr< Material > baseMaterial = std::make_shared< Diffuse >( Color3( 0.0, 0.0, 1.0 ) );
                 std::shared_ptr< Material > baseMaterial = make_shared<DisneyBRDF>( properties );
-                // std::shared_ptr< Material > baseMaterial = make_shared< Normal >( properties );
-
+                
                 for( unsigned int faceIndex = 0; faceIndex < mesh -> mNumFaces; faceIndex++ ){
                     aiFace face = mesh -> mFaces[ faceIndex ];
 
