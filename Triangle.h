@@ -67,9 +67,6 @@ class Triangle : public shape2D {
                 return false;
             }
 
-            Color3 rgbNormal = material -> getNormalTexture() -> value( intersectionManager.u, intersectionManager.v, intersectedPoint );
-            Vector3 worldNormal =  unitVector( Vector3( rgbNormal.r(), rgbNormal.g(), rgbNormal.b() ) * 2.0 - 1.0 ) ;
-
             Vector3 edge1 = B - A;
             Vector3 edge2 = C - A;
             Vector3 deltaUV1 = UVB - UVA;
@@ -80,23 +77,23 @@ class Triangle : public shape2D {
             Vector3 tangent = Vector3(
                 f * (deltaUV2.y() * edge1.x() - deltaUV1.y() * edge2.x()),
                 f * (deltaUV2.y() * edge1.y() - deltaUV1.y() * edge2.y()),
-                f * (deltaUV2.y() * edge1.z() - deltaUV1.y() * edge2.z()));
-
-            Vector3 biTangent = Vector3(
-                f * (-deltaUV2.x() * edge1.x() + deltaUV1.x() * edge2.x()),
-                f * (-deltaUV2.x() * edge1.y() + deltaUV1.x() * edge2.y()),
-                f * (-deltaUV2.x() * edge1.z() + deltaUV1.x() * edge2.z()));
-
-            tangent = unitVector( tangent );
-            biTangent = unitVector( cross(NormalA, tangent) );
-
-            Vector3 transformedNormal = Vector3(
-                worldNormal.x() * tangent.x() + worldNormal.y() * biTangent.x() + worldNormal.z() * NormalA.x(),
-                worldNormal.x() * tangent.y() + worldNormal.y() * biTangent.y() + worldNormal.z() * NormalA.y(),
-                worldNormal.x() * tangent.z() + worldNormal.y() * biTangent.z() + worldNormal.z() * NormalA.z()
+                f * (deltaUV2.y() * edge1.z() - deltaUV1.y() * edge2.z())
             );
+            
+            tangent = unitVector( tangent - dot( tangent, N ) * N );
+            Vector3 biTangent = unitVector( cross( N, tangent ) );
 
-            transformedNormal = unitVector( transformedNormal );
+            Color3 rawNormal = material -> getNormalTexture() -> value( intersectionManager.u, intersectionManager.v, intersectedPoint );
+            Vector3 tangentNormal =  ( Vector3( rawNormal.r(), rawNormal.g(), rawNormal.b() ) * 2.0 - 1.0 ) ;
+
+            double strength = 4.0;
+            tangentNormal = unitVector( Vector3( tangentNormal.x() * strength , tangentNormal.y() * strength , tangentNormal.z() ) );
+
+            Vector3 worldNormal = unitVector( Vector3(
+                tangentNormal.x() * tangent.x() + tangentNormal.y() * biTangent.x() + tangentNormal.z() * N.x(),
+                tangentNormal.x() * tangent.y() + tangentNormal.y() * biTangent.y() + tangentNormal.z() * N.y(),
+                tangentNormal.x() * tangent.z() + tangentNormal.y() * biTangent.z() + tangentNormal.z() * N.z()
+            ));
 
             intersectionManager.t = t;
             intersectionManager.point = intersectedPoint;
@@ -105,7 +102,7 @@ class Triangle : public shape2D {
             bool frontFace = dot( ray.direction(), N ) < 0;
             intersectionManager.frontFace = frontFace;
             intersectionManager.normal = frontFace ? N : -N;
-            intersectionManager.shadingNormal = transformedNormal;
+            intersectionManager.shadingNormal = worldNormal;
 
             return true;
         }
