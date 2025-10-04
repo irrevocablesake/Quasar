@@ -709,7 +709,36 @@ void brickWallNormalMapping() {
     renderer.lookFrom = Point3( -3, 0, 5 );
     renderer.lookAt = Point3( 0, 0, 0 );
     renderer.vUp = Vector3( 0, 1, 0 );
-    renderer.background = Color3( 0, 0, 0);
+    renderer.background = Color3( 0.2, 0.2, 0.2);
+    renderer.defocusAngle = 0;
+    renderer.focusDistance = 10.0;
+    renderer.initialize();
+    renderer.render();
+}
+
+void metalBRDFScene() {
+    const int IMAGE_WIDTH = 800;
+    const double ASPECT_RATIO = 1.0;
+    Image image( IMAGE_WIDTH, ASPECT_RATIO );
+
+    World world;
+    
+    auto lightMaterial3 = make_shared<Light>(Color3(60, 60, 60));
+    auto lightMesh3 = make_shared<Sphere>(Point3(0, 0, 1), 0.1, lightMaterial3 );
+    world.add(lightMesh3);
+
+    shared_ptr< Mesh > brickWall = make_shared< LoadedMesh >("./models/brickWall/model.glb");
+    world.add( brickWall );
+
+    Renderer renderer( world, image );
+    renderer.samplesPerPixel = 200;
+    renderer.maxDepth = 10;
+    renderer.vFOV = 23;
+    renderer.lookFrom = Point3( -3, 0, 5 );
+    renderer.lookAt = Point3( 0, 0, 0 );
+    renderer.vUp = Vector3( 0, 1, 0 );
+    // renderer.background = Color3( 0.529, 0.808, 0.92 );
+    renderer.background = Color3( 0, 0, 0 );
     renderer.defocusAngle = 0;
     renderer.focusDistance = 10.0;
     renderer.initialize();
@@ -718,7 +747,7 @@ void brickWallNormalMapping() {
 
 int main(){
     
-    int scene = 16;
+    int scene = 17;
 
     switch( scene ){
         case 1: classicScene();  break;
@@ -737,6 +766,7 @@ int main(){
         case 14: sceneLoad(); break;
         case 15: BRDF(); break;
         case 16: brickWallNormalMapping(); break;
+        case 17: metalBRDFScene(); break;
     }
     
     return 0;

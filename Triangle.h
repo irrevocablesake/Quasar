@@ -95,13 +95,17 @@ class Triangle : public shape2D {
                 bitangent = unitVector( BiTangentA * alpha + BiTangentB * beta + BiTangentC * gamma );
             }
 
+            intersectionManager.T = tangent;
+            intersectionManager.B = bitangent;
+            intersectionManager.N = normal;
+
             worldNormal = unitVector( Vector3(
                     tangentNormal.x() * tangent.x() + tangentNormal.y() * bitangent.x() + tangentNormal.z() * normal.x(),
                     tangentNormal.x() * tangent.y() + tangentNormal.y() * bitangent.y() + tangentNormal.z() * normal.y(),
                     tangentNormal.x() * tangent.z() + tangentNormal.y() * bitangent.z() + tangentNormal.z() * normal.z()
             ));
                 
-            worldNormal = Vector3( worldNormal.x() * material->getNormalTextureFactor(), worldNormal.y() * material -> getNormalTextureFactor(), worldNormal.z() );
+            // worldNormal = Vector3( worldNormal.x() * material->getNormalTextureFactor(), worldNormal.y() * material -> getNormalTextureFactor(), worldNormal.z() );
 
             intersectionManager.t = t;
             intersectionManager.point = intersectedPoint;
@@ -153,7 +157,7 @@ class Triangle : public shape2D {
             TangentB = B;
             TangentC = C;
 
-            hasTangent = false;
+            hasTangent = true;
         }
 
         void setBiTangents( Vector3 A, Vector3 B, Vector3 C ){

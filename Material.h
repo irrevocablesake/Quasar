@@ -18,6 +18,7 @@ struct MaterialProperties {
     float roughnessFactor;
     float subSurfaceFactor;
     float normalTextureFactor;
+    float anisotropicFactor;
 };
 
 class Material {
@@ -264,7 +265,7 @@ class DiffuseBRDF : public Material{
 
             Color3 diffuse = ( 1 - properties.subSurfaceFactor ) * baseDiffuse + properties.subSurfaceFactor * subSurface;
 
-            return subSurface;
+            return diffuse;
         }
 
         double getPDF( Vector3 normal, Vector3 outDirection ) const {
@@ -300,19 +301,135 @@ class DiffuseBRDF : public Material{
         MaterialProperties properties;
 };
 
+class MetalBRDF : public Material{
+    public:
+        MetalBRDF() {}
+        MetalBRDF( MaterialProperties properties ){
+            this -> properties = properties;
+        }
+
+        Vector3 reflected( const Vector3 & vector, const Vector3 &normal ) const{
+            return vector - 2 * dot( vector, normal ) * normal;
+        }
+        
+        Color3 calculateFm( Vector3 incomingDirection, Vector3 outgoingDirection, IntersectionManager intersectionManager ) const{
+            Color3 baseColor = properties.diffuseTexture -> value( intersectionManager.u, intersectionManager.v, intersectionManager.point );
+
+            Vector3 halfVector = unitVector(incomingDirection + outgoingDirection);
+
+            Color3 Fm = baseColor + ( Color3( 1, 1, 1) - baseColor ) * ( 1 - std::pow( std::abs( dot( halfVector, outgoingDirection) ), 5 ));
+            return Fm;
+        }
+
+        double calculateDm( Vector3 incomingDirection, Vector3 outgoingDirection, IntersectionManager intersectionManager ) const {
+
+            Vector3 halfVector = unitVector(incomingDirection + outgoingDirection);
+            Vector3 localHalfVector = Vector3(
+                dot( halfVector, intersectionManager.T ),
+                dot( halfVector, intersectionManager.B ),
+                dot( halfVector, intersectionManager.N )
+            );
+
+            double aspect = std::sqrt( 1 - 0.9 * properties.anisotropicFactor );
+            double alphaX = std::max( alphaMin, std::pow( properties.roughnessFactor, 2 ) / aspect );
+            double alphaY = std::max( alphaMin, std::pow( properties.roughnessFactor, 2 ) *  aspect);
+            double subDenom = (std::pow(localHalfVector.x(), 2) / std::pow( alphaX, 2 ))  + ( std::pow(localHalfVector.y(), 2) / std::pow( alphaY, 2 ) )+ std::pow( localHalfVector.z(), 2 );
+            double denom = PI * alphaX * alphaY * std::pow( subDenom, 2 );
+            double Dm = ( 1 / denom );
+
+            return Dm;
+        }
+
+        double lambda( Vector3 direction, IntersectionManager intersectionManager ) const{
+            
+            double aspect = std::sqrt( 1 - 0.9 * properties.anisotropicFactor );
+            double alphaX = std::max( alphaMin, std::pow( properties.roughnessFactor, 2 ) / aspect );
+            double alphaY = std::max( alphaMin, std::pow( properties.roughnessFactor, 2 ) *  aspect);
+
+             Vector3 localDirection = Vector3(
+                dot( direction, intersectionManager.T ),
+                dot( direction, intersectionManager.B ),
+                dot( direction, intersectionManager.N )
+            );
+
+            double A = 1 + ( ( std::pow( ( localDirection.x() * alphaX ), 2 ) + std::pow( ( localDirection.y() * alphaY ), 2 ) ) / std::pow( localDirection.z(), 2 ) ) - 1;
+            
+            double value = std::sqrt( std::max( ( A - 1 ) / 2, 0.0 ) );
+
+            return value;
+        }
+
+        double G( Vector3 direction, IntersectionManager intersectionManager ) const {
+            double value = ( 1 / ( 1 + lambda( direction, intersectionManager ) ) );
+
+            return value;
+        }
+
+        double calcualteGm( Vector3 incomingDirection, Vector3 outgoingDirection, IntersectionManager intersectionManager ) const{
+            double Gm = G( incomingDirection, intersectionManager ) * G( outgoingDirection, intersectionManager );
+            return Gm;
+        }
+
+        Color3 evaluate( IntersectionManager &intersectionManager,  const Vector3 &incomingDirection, Vector3 outgoingDirection ) const {
+            Color3 Fm = calculateFm( incomingDirection, outgoingDirection, intersectionManager );
+            double Dm = calculateDm( incomingDirection, outgoingDirection, intersectionManager );
+            double Gm = calcualteGm( incomingDirection, outgoingDirection, intersectionManager );
+
+            Color3 color = ( Fm * Dm * Gm ) / ( 4 * std::abs( dot( intersectionManager.shadingNormal, incomingDirection )));
+
+            return color;
+        }
+
+        double getPDF( Vector3 normal, Vector3 outDirection ) const {
+            return 1.0;
+        }
+
+        Vector3 sample( Vector3 normal, Vector3 shadingNormal, bool frontFace, Vector3 vector ) const {            
+            Vector3 scatterDir = unitVector( reflected( vector, shadingNormal ));
+            if( !frontFace ){
+                scatterDir = normal;
+            }
+
+            return scatterDir;
+        }
+
+        bool scatter( const Ray &ray, Color3 &attenuation, Ray &scattered, IntersectionManager &intersectionManager ) const override {
+            Vector3 sampleDirection = sample( intersectionManager.normal, intersectionManager.shadingNormal, intersectionManager.frontFace, ray.direction()  );
+            if( sampleDirection.nearZero() ){
+                sampleDirection = intersectionManager.shadingNormal;
+            }
+
+            Color3 evaluateBRDF = evaluate( intersectionManager, ray.direction(), sampleDirection );
+            double pdf = getPDF( intersectionManager.shadingNormal, sampleDirection );
+
+            scattered = Ray( intersectionManager.point, sampleDirection, ray.time() );
+            attenuation = evaluateBRDF * dot( intersectionManager.shadingNormal, sampleDirection ) / pdf;
+
+            return true;
+        }
+
+    public:
+        MaterialProperties properties;
+        double alphaMin = 0.0001;
+};
+
 class DisneyBRDF : public Material {
     public:
         DiffuseBRDF diffuseBRDF;
+        MetalBRDF metalBRDF;
         MaterialProperties properties;
 
         DisneyBRDF( MaterialProperties properties ) {
             this -> properties = properties;
             diffuseBRDF = DiffuseBRDF( properties );
+            metalBRDF = MetalBRDF( properties );
         }
 
-        bool scatter(const Ray &ray, Color3 &attenuation, Ray &scattered, IntersectionManager &intersectionManager) const override {
-            bool verdict = diffuseBRDF.scatter( ray, attenuation, scattered, intersectionManager );
-            return verdict;
+        bool scatter(const Ray &ray, Color3 &attenuation, Ray &scattered, IntersectionManager &intersectionManager) const override {            
+            bool diffuseVerdict = diffuseBRDF.scatter( ray, attenuation, scattered, intersectionManager );
+            // bool metalVerdict = metalBRDF.scatter( ray, attenuation, scattered, intersectionManager );
+
+            return true;
         };
 
         shared_ptr<Texture> getNormalTexture() const override { 

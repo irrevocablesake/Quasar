@@ -19,6 +19,8 @@ class IntersectionManager{
         Vector3 shadingNormal;
         bool frontFace;
 
+        Vector3 T,B,N;
+
         shared_ptr< Material > material;
 
         double u;

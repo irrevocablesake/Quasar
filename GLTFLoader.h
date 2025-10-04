@@ -99,7 +99,8 @@ class GLTFLoader {
                     properties.normalTexture = make_shared< solidColor>( Color3( 0.5, 0.5, 1.0 ) );
                 }
                 properties.subSurfaceFactor = 0.5;
-                properties.normalTextureFactor = 3;
+                properties.normalTextureFactor = 1;
+                properties.anisotropicFactor = 1;
 
                 std::shared_ptr< Material > baseMaterial = make_shared<DisneyBRDF>( properties );
                 
