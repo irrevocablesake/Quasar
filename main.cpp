@@ -723,7 +723,7 @@ void metalBRDFScene() {
 
     World world;
     
-    auto lightMaterial3 = make_shared<Light>(Color3(60, 60, 60));
+    auto lightMaterial3 = make_shared<Light>(Color3(300, 300, 300));
     auto lightMesh3 = make_shared<Sphere>(Point3(0, 0, 1), 0.1, lightMaterial3 );
     world.add(lightMesh3);
 
