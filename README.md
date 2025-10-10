@@ -33,7 +33,7 @@ This repository contains a **_C++_** and **_Python_** implementation for the ren
 - [Bounding Volume Hierarchies ( BVH )](#bounding-volume-hierarchies--bvh-)
 - [Multi-Threading](#multi-threading)
 - [UI](#ui)
-- [Author's Note](#)
+- [Author's Note](#authors-note)
 
 ### GLB & GLTF 
 
