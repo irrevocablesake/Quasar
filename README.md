@@ -6,9 +6,32 @@
   <em>A Hero Render</em>
 </p>
 
-After spending months and casting trillions of rays, all the work has finally cumulated into "Quasar" - my very own Rendering Engine based on Path Tracing. The Hero Render is a testimony to our statement, a dragon - which symbolizes power, courage and authority.
+After spending months and casting trillions of rays, all the work has finally cumulated into "Quasar" - my very own Rendering Engine based on Path Tracing. The Hero Render is a testimony to that statement, a dragon - which symbolizes power, courage and authority.
 
 This repository contains a c++ and python implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections, I will walk you through the feature set and will conclude by mentioning the plans for future.
+
+## Index
+
+- [GLB / GLTF](#GLB-/-GLTF)
+- [Shading](#Shading)
+- [Lights](#Lights)
+  - [Ambient Light](#Ambient-Light)
+- [Textures](#Textures)
+- [Motion Blur](#Motion-Blur)
+- [Bounding Volume Hierarchies ( BVH )](#Bounding-Volume-Hierarchies-(-BVH-))
+- [Normal Map](#Normal-Map)
+- [Cornell Box](#Cornell-Box)
+- [Volumetrics](#Volumetrics)
+- [Material Showcase](#Material-Showcase)
+  - [Basic Materials](#Basic-Materials)
+- [Anti - Aliasing](#Anti---Aliasing)
+- [Depth Of Field ( DOF )](#Depth-of-Field-(-DOF-))
+- [Field Of View ( FOV )](#Field-Of-View-(-FOV-))
+- [Max Depth & SPP](#Max-Depth-&-SPP)
+- [Low Depth + Low SPP and Bounded Reflections](#Low-Depth-+-Low-SPP-and-Bounced-Reflections)
+- [Mesh Types and Transformations](#Mesh-Types-and-Transformations)
+- [Multi-threading](#Multi-threading)
+- [UI](#UI)
 
 ## GLB / GLTF 
 
