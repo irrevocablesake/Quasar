@@ -82,3 +82,8 @@ Like any other library, Textures are loaded asna separate entity, then attached 
 Motion blur is a visual effect that simulates the streaking or blurring of moving objects in a scene, caused by the relative motion between the camera and objects during the exposure time of a frame. In our case, the camera always stays stable and the object moves, this movement is described by assigning two positions to our desired object: the start position and the end position
 
 The Hero Render is a good example that encapsulates the entire idea, it also proves how true out implementation is to physical reality as it shows all the reflections of the surrounding light whilst being in motion.
+
+## Bounding Volume Hierarchies ( BVH )
+
+A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tracing by organizing scene geometry into nested bounding volumes, enabling efficient ray-object intersection tests, which in turn translates directly to improved rendering time. Earlier, without BVH, certain scenes took 12-14 hours, but with BVH that time came down to 1 hour
+
