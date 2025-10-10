@@ -496,6 +496,7 @@ The Volumetrics scene is massive and complex: 1000 spheres, caustics, Fog, 10k s
 For other small scenes in here, i could see time going down from mins to seconds or hours to mins.
 
 ## UI
+ <video src="images/portfolio/RenderingVideo.mp4" />
 
 <div align="center">
 <table>
@@ -503,8 +504,6 @@ For other small scenes in here, i could see time going down from mins to seconds
     <tr>
       <td >
         
-<video src="images/portfolio/RenderingVideo.mp4" />
-
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
           Render Information
         </p>
