@@ -87,3 +87,12 @@ The Hero Render is a good example that encapsulates the entire idea, it also pro
 
 A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tracing by organizing scene geometry into nested bounding volumes, enabling efficient ray-object intersection tests, which in turn translates directly to improved rendering time. Earlier, without BVH, certain scenes took 12-14 hours, but with BVH that time came down to 1 hour
 
+## Ambient Light
+
+<p align="center">
+  <img src="images/portfolio/metalNonMetal.png" width="80%"/>
+  <br>
+  <em>Metal Fox</em>
+</p>
+
+Ambient light is the base layer of general illumination that fills a space, providing the overall brightness and establishing the mood or atmosphere. This feature also implies that we don't need any explicit light as the ambient light will contribute enough to generate a visually appealing result, albeit that depends upon the configuration of the Ambient Light.
