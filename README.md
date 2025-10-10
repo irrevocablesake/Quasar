@@ -6,9 +6,9 @@
   <em>A Hero Render</em>
 </p>
 
-After spending months and casting **trillions** of rays, all the work has finally cumulated into "**_Quasar_**" - my very own Rendering Engine based on Path Tracing. The Hero Render is a testimony to that statement, a dragon - which symbolizes power, courage and authority.
+After spending months and casting **trillions** of rays, all the work has finally cumulated into "_Quasar_" - my very own **_Rendering Engine_** based on Path Tracing. The Hero Render is a testimony to that statement, a dragon - which symbolizes power, courage and authority.
 
-This repository contains a c++ and python implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections, I will walk you through the feature set and will conclude by mentioning the plans for future.
+This repository contains a **_C++_** and **_Python_** implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections, I will walk you through the feature set and will conclude by mentioning the plans for future.
 
 ## Index
 
@@ -19,17 +19,17 @@ This repository contains a c++ and python implementation for the rendering engin
   - [Ambient Light](#ambient-light)
 - [Textures](#textures)
 - [Motion Blur](#motion-blur)
-- [Bounding Volume Hierarchies ( BVH )](#bounding-volume-hierarchies--bvh-)
 - [Normal Map](#normal-map)
-- [Cornell Box](#cornell-box)
 - [Volumetrics](#volumetrics)
+- [Mesh Types and Transformations](#mesh-types-and-transformations)
+- [Cornell Box](#cornell-box)
 - [Material Showcase](#material-showcase)
 - [Anti-Aliasing](#anti-aliasing)
 - [Depth Of Field ( DOF )](#depth-of-field--dof-)
 - [Field Of View ( FOV )](#field-Of-view--fov-)
 - [Max Depth & SPP](#max-depth--spp)
 - [Low Depth, Low SPP and Bounded Reflections](#low-depth-low-spp-and-bounced-reflections)
-- [Mesh Types and Transformations](#mesh-types-and-transformations)
+- [Bounding Volume Hierarchies ( BVH )](#bounding-volume-hierarchies--bvh-)
 - [Multi-Threading](#multi-threading)
 - [UI](#ui)
 
@@ -120,10 +120,6 @@ Motion blur is a visual effect that simulates the streaking or blurring of movin
 
 The Hero Render is a good example that encapsulates the entire idea, it also proves how true out implementation is to physical reality as it shows all the reflections of the surrounding light whilst being in motion.
 
-### Bounding Volume Hierarchies ( BVH )
-
-A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tracing by organizing scene geometry into nested bounding volumes, enabling efficient ray-object intersection tests, which in turn translates directly to improved rendering time. Earlier, without BVH, certain scenes took 12-14 hours, but with BVH that time came down to 1 hour
-
 ### Normal Map
 
 <p align="center">
@@ -138,18 +134,6 @@ A normal map is a texture map in 3D computer graphics that stores directional in
 
 Normal maps are pretty crucial, because if properly configured thay bring us closer to realism. 
 
-### Cornell Box
-
-<p align="center">
-  <img src="images/portfolio/CornellBox.png" width="100%"/>
-  <br>
-  <em>Cornell Box</em>
-</p>
-
-The Cornell box is a test scene designed to evaluate the accuracy of rendering software by comparing a rendered image with a photograph of a real-world model under the same lighting conditions.
-
-Here's a visual for Cornell's Box rendered using Quasar.
-
 ### Volumetrics
 
 <p align="center">
@@ -161,6 +145,32 @@ Here's a visual for Cornell's Box rendered using Quasar.
 Volumetrics is the idea of simulating and rendering participating medium. Mediums that scatter, absorb or emit light as it travels through them. Examples like: Fog, Smoke, Dust and Most.
 
 Quasar has implemented them in the form of a Texture / Material, one has to define the boundary of such a medium using a Mesh and then use the provided Isotropic Material, configure the density of the medium and voila! You have a Fog or mist or anything in between or outside depending upon the density.
+
+### Mesh Types and Transformations
+
+Quasar has a few in built types of geometries, which can be extended further easily. Majorly there are two types of geometries:
+- Primitives ( Sphere / Quad / Triangle )
+- Composites ( Composites / Primivites )
+
+Each of them are described by pure mathematical functions. These equations not only allow us to implement the geometry but also transform them using the following operations:
+- Rotation
+- Translation
+
+These implementations use a clever trick of transforming the ray to the local coordinate system, rather than updating the geometrical data representing the geomtry
+
+Note: When reading the GLB, we just take the data and convert to our class of Triangles and Composites
+
+### Cornell Box
+
+<p align="center">
+  <img src="images/portfolio/CornellBox.png" width="100%"/>
+  <br>
+  <em>Cornell Box</em>
+</p>
+
+The Cornell box is a test scene designed to evaluate the accuracy of rendering software by comparing a rendered image with a photograph of a real-world model under the same lighting conditions.
+
+Here's a visual for Cornell's Box rendered using Quasar.
 
 ### Material Showcase
 
@@ -488,19 +498,9 @@ You can see that low Depth + low SPP, would result into a grainy and dark image 
 </table>
 </div>
 
-### Mesh Types and Transformations
+### Bounding Volume Hierarchies ( BVH )
 
-Quasar has a few in built types of geometries, which can be extended further easily. Majorly there are two types of geometries:
-- Primitives ( Sphere / Quad / Triangle )
-- Composites ( Composites / Primivites )
-
-Each of them are described by pure mathematical functions. These equations not only allow us to implement the geometry but also transform them using the following operations:
-- Rotation
-- Translation
-
-These implementations use a clever trick of transforming the ray to the local coordinate system, rather than updating the geometrical data representing the geomtry
-
-Note: When reading the GLB, we just take the data and convert to our class of Triangles and Composites
+A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tracing by organizing scene geometry into nested bounding volumes, enabling efficient ray-object intersection tests, which in turn translates directly to improved rendering time. Earlier, without BVH, certain scenes took 12-14 hours, but with BVH that time came down to 1 hour
 
 ### Multi Threading
 
