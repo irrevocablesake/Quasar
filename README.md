@@ -344,6 +344,20 @@ You can see that low Depth + low SPP, would result into a grainy and dark image 
 </table>
 </div>
 
+## Mesh Types and Transformations
+
+Quasar has a few in built types of geometries, which can be extended further easily. Majorly there are two types of geometries:
+- Primitives ( Sphere / Quad / Triangle )
+- Composites ( Composites / Primivites )
+
+Each of them are described by pure mathematical functions. These equations not only allow us to implement the geometry but also transform them using the following operations:
+- Rotation
+- Translation
+
+These implementations use a clever trick of transforming the ray to the local coordinate system, rather than updating the geometrical data representing the geomtry
+
+Note: When reading the GLB, we just take the data and convert to our class of Triangles and Composites
+
 ## Multi-threading
 
 The nature of graphics rendering is embarrassingly parallel, it's like "hey, this is the process to calculate the color of a pixel, can you apply it to millions of pixels"?
