@@ -331,7 +331,7 @@ Two things can control Depth of Field:
   <tbody>
     <tr>
       <td >
-        <img src="images/dportfolio/info_1/defocusDistance/render1.png" width="100%">
+        <img src="images/portfolio/info_1/defocusDistance/render1.png" width="100%">
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
           Defocus Distance
         </p>
