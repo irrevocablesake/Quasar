@@ -27,8 +27,7 @@ This repository contains a **_C++_** and **_Python_** implementation for the ren
 - [Anti-Aliasing](#anti-aliasing)
 - [Depth Of Field ( DOF )](#depth-of-field--dof-)
 - [Field Of View ( FOV )](#field-Of-view--fov-)
-- [Max Depth & SPP](#max-depth--spp)
-- [Low Depth, Low SPP and Bounded Reflections](#low-depth-low-spp-and-bounced-reflections)
+- [Depth & SPP](#depth--spp)
 - [Bounding Volume Hierarchies ( BVH )](#bounding-volume-hierarchies--bvh-)
 - [Multi-Threading](#multi-threading)
 - [UI](#ui)
@@ -41,14 +40,14 @@ This repository contains a **_C++_** and **_Python_** implementation for the ren
   <em>Classic Sponza Atrium</em>
 </p>
 
-Creating complex scenes using basic shapes with code becomes cumbersome really fast. Loading models through GLB / GLTF was an envitable feature. Quasar uses Assimp for interpreting the GLB / GLTF file and load the geometry /  material information in memory. The read information is stored into an in-memory format that Quasar uses to render visuals on screen. 
+Creating complex scenes using basic shapes and code becomes cumbersome really fast. **Loading** models through GLB / GLTF was an envitable feature. Quasar uses **_Assimp_** for interpreting the GLB / GLTF file and load the geometry /  material information in memory. The read information is stored into an in-memory format that Quasar uses to render visuals on screen. 
 
-As of now, everything is loaded as triangles, for materials GLTF format uses Principled BSDF approach with KHR extensions wherever needed. Quasar has the ability to work with:
+As of now, everything is loaded as **triangles**, for materials GLTF format uses **Principled BSDF** approach with _KHR_ extensions wherever needed. Quasar has the ability to work with:
 - Diffuse Color
 - Diffuse Texture
 - Normal Map
 
-Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remaining values of Principled BSDF are a WIP, being implemented as Disney BRDF.
+Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remaining values of Principled BSDF are a WIP ( present in repo but not used ), being implemented as **Disney BRDF**.
 
 ### Shading
 
@@ -58,11 +57,11 @@ Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remai
   <em>Shading Types</em>
 </p>
 
-Lighting is mostly a play of normals and how we reflect the incoming ray. This leads to the following two cases:
-- Flat Shading: Use vertex normals
-- Smooth Shading: Use nighbouring normals 
+Lighting is mostly a play of **normals** and how we **reflect** the incoming ray. This leads to the following two cases:
+- **Flat Shading**: Use vertex normals
+- **Smooth Shading**: Use neighbouring normals 
 
-Fortunately, Quasar is capable of working with both the situations. All one has to do is make sure the appropriate shading mode is applies before exporting GLB / GLTF.
+Fortunately, Quasar is capable of working with both the situations. All one has to do is make sure the appropriate shading mode is applied before exporting GLB / GLTF.
 
 ### Lights
 
@@ -70,7 +69,7 @@ In Quasar, there are two types of light sources:
 - Sources Light
 - Ambient Light
 
-The engine itself supports Global Illumination, as a result of the Path Tracing algorithm, which means it will convey the physics of light upto a certain extent. The current implementation includes lights as a material, so all one has to do is apply a material to mesh.
+The engine itself supports** Global Illumination**, as a result of the Path Tracing algorithm, which means it will convey the **physics** of light upto a certain extent. The current implementation includes lights as a material, so all one has to do is apply a material to mesh.
 
 #### Source Light
 
@@ -80,7 +79,7 @@ The engine itself supports Global Illumination, as a result of the Path Tracing 
   <em>Source Light</em>
 </p>
 
-In this case, Quad geometry is used to create the shape of light, and one can see that the colors from different light sources get mixed and result into a 3rd color.
+In this case, Quad geometry is used to create the shape of light, and one can see that the colors from different light sources **blend** and result into a 3rd color.
 
 #### Ambient Light
 
@@ -90,7 +89,7 @@ In this case, Quad geometry is used to create the shape of light, and one can se
   <em>Ambient Light</em>
 </p>
 
-Ambient light is the base layer of general illumination that fills a space, providing the overall brightness and establishing the mood or atmosphere. This feature also implies that we don't need any explicit light as the ambient light will contribute enough to generate a visually appealing result, albeit that depends upon the configuration of the Ambient Light.
+Ambient light is the base layer of **general illumination** that fills a space, providing the overall brightness and establishing the mood or atmosphere. This feature also implies that we don't need any explicit light as the ambient light will contribute enough to generate a visually appealing result, albeit that depends upon the configuration of the Ambient Light.
 
 ### Textures
 
@@ -106,7 +105,7 @@ There are 2 types of textures in the pipeline:
 - Procedural: Perlin Noise + Checkers
 - Image
 
-Like any other library, Textures are loaded asna separate entity, then attached to the material to be used during Rendering. One important thing for Image Textures is UV coordinates, which can either be loaded through GLB / GLTF or computed on the fly using barycentric coordinates
+Like any other library, Textures are loaded as a separate entity, then attached to the material to be used during Rendering. One important thing for Image Textures is **UV** coordinates, which can either be loaded through GLB / GLTF or computed on the fly using **barycentric** coordinates
 
 ### Motion Blur
 
@@ -128,7 +127,7 @@ The Hero Render is a good example that encapsulates the entire idea, it also pro
   <em>Normal Map</em>
 </p>
 
-Normal maps deserve their own section because of the sweet maths that goes behind them. Tangents, Bi-Tangents and Normals are the driving factor in this case. This orthogonal basis can either be loaded from GLB / GLTF or Quasar can generate them on the fly, just like UVs
+Normal maps deserve their own section because of the sweet maths that goes behind them._ Tangents_, _Bi-Tangents_ and _Normals_ are the driving factor in this case. This orthogonal basis can either be loaded from GLB / GLTF or Quasar can generate them on the fly, just like UVs
 
 A normal map is a texture map in 3D computer graphics that stores directional information in an RGB image to simulate fine surface detail, such as bumps, grooves, and scratches, without altering the model's actual geometry. It basically modifies how light reflects off of a surface.
 
@@ -144,21 +143,21 @@ Normal maps are pretty crucial, because if properly configured thay bring us clo
 
 Volumetrics is the idea of simulating and rendering participating medium. Mediums that scatter, absorb or emit light as it travels through them. Examples like: Fog, Smoke, Dust and Most.
 
-Quasar has implemented them in the form of a Texture / Material, one has to define the boundary of such a medium using a Mesh and then use the provided Isotropic Material, configure the density of the medium and voila! You have a Fog or mist or anything in between or outside depending upon the density.
+Quasar has implemented them in the form of a Texture / Material, one has to define the boundary of such a medium using a Mesh and then use the provided **Isotropic Material**, configure the density of the medium and voila! You have a Fog or mist or anything in between or outside depending upon the density.
 
 ### Mesh Types and Transformations
 
 Quasar has a few in built types of geometries, which can be extended further easily. Majorly there are two types of geometries:
-- Primitives ( Sphere / Quad / Triangle )
-- Composites ( Composites / Primivites )
+- **Primitives** ( Sphere / Quad / Triangle )
+- **Composites** ( Composites / Primitives )
 
-Each of them are described by pure mathematical functions. These equations not only allow us to implement the geometry but also transform them using the following operations:
+Each of them are described by pure **mathematical** functions. These equations not only allow us to implement the geometry but also transform them using the following operations:
 - Rotation
 - Translation
 
-These implementations use a clever trick of transforming the ray to the local coordinate system, rather than updating the geometrical data representing the geomtry
+These implementations use a clever trick of transforming the ray to the **local coordinate** system, rather than updating the geometrical data representing the geomtry
 
-Note: When reading the GLB, we just take the data and convert to our class of Triangles and Composites
+**Note**: When reading the GLB, we just take the data and convert to our class of Triangles and Composites
 
 ### Cornell Box
 
@@ -168,9 +167,7 @@ Note: When reading the GLB, we just take the data and convert to our class of Tr
   <em>Cornell Box</em>
 </p>
 
-The Cornell box is a test scene designed to evaluate the accuracy of rendering software by comparing a rendered image with a photograph of a real-world model under the same lighting conditions.
-
-Here's a visual for Cornell's Box rendered using Quasar.
+The Cornell box is a test scene designed to evaluate the accuracy of rendering software by comparing a rendered image with a photograph of a real-world model under the same lighting conditions. Above is the Cornell Box Test Result for our Rendering Engine.
 
 ### Material Showcase
 
@@ -318,17 +315,17 @@ Just to showcase the "magic" of PathTracing, I have also created the following t
 </table>
 </div>
 
-Anti-Aliasing helps reduce the jagged, stair-step edges that can appear in digital images, especially along diagonal lines or curves. In the real world, visual information is continuous, but in a rendered image, we approximate it with a grid of discrete pixels. By taking multiple samples per pixel and averaging the results, anti-aliasing creates smoother transitions and more realistic gradients, resulting in a cleaner and more natural-looking image.
+Anti-Aliasing helps reduce the jagged, stair-step edges that can appear in digital images, especially along diagonal lines or curves. In the real world, visual information is continuous, but in a rendered image, we **approximate** it with a grid of discrete pixels. By taking multiple **samples per pixel** and **averaging the results**, anti-aliasing creates smoother transitions and more realistic gradients, resulting in a cleaner and more natural-looking image.
 
 ### Depth of Field ( DOF )
 
-You already must have had experience with depth of Field, when you click photos or even watch vlogs on youtube. You might see that the speaker is sharp but the background is blurred, that is due to depth of field
+You already must have had experience with depth of Field, when you click photos or even watch vlogs on youtube. You might see that the speaker is sharp but the background is **blurred**, that is due to depth of field
 
-The "Field" in "Depth of Field" is merely an area in which objects appear sharp, the "Depth" in "Depth of Field" is like "how deep is the field", and mostly we are interested in controlling this so called "Depth". Unfortunately for us, according to our current implementation ( based on book ), we wouldn't be able to control the "deepness" of the field, rather for us ~ it's a "field" where object will appear in focus but more like a "Plane" and what ever is in the plane region will appear sharp. Things further before or after the plane will get blurred.
+The "Field" in "Depth of Field" is merely an area in which objects appear sharp, the "Depth" in "Depth of Field" is like "how deep is the field", and mostly we are interested in controlling this so called "Depth". Unfortunately for us, according to our current implementation, we wouldn't be able to control the "deepness" of the field, rather for us ~ it's a "field" where object will appear in focus but more like a "Plane" and what ever is in the plane region will appear sharp. Things further before or after the plane will get blurred.
 
 Two things can control Depth of Field:
-- De-focus Angle: If there is a blur section in an image, then how much to blur it
-- De-focus Distance: When to place the plane, at this distance everything will be sharp
+- **De-focus Angle:** If there is a blur section in an image, then how much to blur it
+- **De-focus Distance:** When to place the plane, at this distance everything will be sharp
 
 ##### Defocus Angle "How much to blur the blurry regions"
 
@@ -384,7 +381,7 @@ Two things can control Depth of Field:
 
 ### Field Of View ( FOV )
 
-Field of View controls how wide the camera can see. A smaller FOV gives a zoomed-in, narrow perspective, while a larger FOV creates a wide-angle view. We use vFOV here, but also hFOV would have been fine. In our case we supply the vFOV and the dimensions are automatically adjusted
+Field of View controls how wide the camera can see. A smaller FOV gives a zoomed-in, narrow perspective, while a larger FOV creates a wide-angle view. We use **vFOV** here, but also hFOV would have been fine. In our case we supply the vFOV and the dimensions are automatically adjusted
 
 <div align="center">
 <table>
@@ -411,10 +408,10 @@ Field of View controls how wide the camera can see. A smaller FOV gives a zoomed
 
 In ray tracing, max depth defines the maximum number of times a ray is allowed to bounce (or recurse) before it's terminated. Each bounce represents a light interaction — such as reflection, refraction, or scattering.
 
-In Ray Tracing in One Weekend, this is used to avoid infinite recursion and control render time. A ray that exceeds the max depth is assumed to contribute no more light, and its color is set to black
+This parameter is used to avoid infinite recursion and control render time. A ray that exceeds the max depth is assumed to contribute no more light, and its color is set to black
 
-- A lower max depth results in faster renders but may miss deeper reflections or refractions.
-- A higher max depth produces more realistic images, especially for transparent or reflective materials, but is computationally more expensive.
+- A **lower** depth results in faster renders but may miss deeper reflections or refractions.
+- A **higher** depth produces more realistic images, especially for transparent or reflective materials, but is computationally more expensive.
 
 <div align="center">
 <table>
@@ -423,19 +420,19 @@ In Ray Tracing in One Weekend, this is used to avoid infinite recursion and cont
       <td >
         <img src="images/portfolio/info_1/maxDepth/maxdepth2samplerate500.png" width="100%">
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
-          Max Depth 2 SPP 500
+          Depth 2 SPP 500
         </p>
       </td>
       <td>
         <img src="images/portfolio/info_1/maxDepth/maxdepth10samplerate500.png" width="100%">
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
-          Max Depth 10 SPP 500
+          Depth 10 SPP 500
         </p>
       </td>
       <td>
         <img src="images/portfolio/info_1/maxDepth/maxdepth50samplerate500.png" width="100%">
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
-          Max Depth 50 SPP 500
+          Depth 50 SPP 500
         </p>
       </td>
     </tr>
@@ -443,7 +440,7 @@ In Ray Tracing in One Weekend, this is used to avoid infinite recursion and cont
 </table>
 </div>
 
-SPP controls how many rays are shot per pixel to estimate its final color. Instead of casting just one ray, multiple rays with slight random offsets are averaged to reduce noise and achieve anti-aliasing. 
+SPP ( Samples Per Pixel ) controls how many rays are shot per pixel to estimate its final color. Instead of casting just one ray, multiple rays with slight random offsets are averaged to reduce noise and achieve anti-aliasing. 
 Fun Fact: Since SPP adds extra rays, the extra rays tend to be additional cost. DOF uses this additional cost to it's benefit and implements the blur effect
 
 <div align="center">
@@ -453,27 +450,25 @@ Fun Fact: Since SPP adds extra rays, the extra rays tend to be additional cost. 
       <td >
         <img src="images/portfolio/info_1/maxDepth/maxdepth50samplerate2.png" width="100%">
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
-          Max Depth 50 SPP 2
+          Depth 50 SPP 2
         </p>
       </td>
       <td>
         <img src="images/portfolio/info_1/maxDepth/maxdepth50samplerate50.png" width="100%">
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
-          Max Depth 50 SPP 50
+          Depth 50 SPP 50
         </p>
       </td>
       <td>
         <img src="images/portfolio/info_1/maxDepth/maxdepth50samplerate500.png" width="100%">
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
-          Max Depth 50 SPP 500
+          Depth 50 SPP 500
         </p>
       </td>
     </tr>
   </tbody>
 </table>
 </div>
-
-#### Low Depth, Low SPP and Bounced Reflections
 
 You can see that low Depth + low SPP, would result into a grainy and dark image because not enough rays are spawned which results in bad sampling and low Depth causes less infoinformation to be gathered. In the right image, you can see that a image generated with good parameters would give a good anti-aliased + tinted reflections + smooth image
 
