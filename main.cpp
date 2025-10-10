@@ -677,25 +677,29 @@ void BRDF() {
 }
 
 void brickWallNormalMapping() {
-    const int IMAGE_WIDTH = 800;
-    const double ASPECT_RATIO = 1.0;
+    const int IMAGE_WIDTH = 1980;
+    const double ASPECT_RATIO = 2.20;
     Image image( IMAGE_WIDTH, ASPECT_RATIO );
 
     World world;
 
-    auto lightMaterial = make_shared<Light>(Color3(180, 180, 180));
+    // auto lightMaterial = make_shared<Light>(Color3( 10, 10, 10 ));
+    // auto lightMesh = make_shared< Sphere >( Point3( 0, 0, 4 ), 0.1, lightMaterial );
+    // world.add(lightMesh);
+
+    auto lightMaterial = make_shared<Light>(Color3(140, 140, 140));
     auto lightMesh = make_shared< Sphere >( Point3( 1, 1, 1 ), 0.1, lightMaterial );
     world.add(lightMesh);
     
-    auto lightMaterial1 = make_shared<Light>(Color3(100, 100, 100));
+    auto lightMaterial1 = make_shared<Light>(Color3(140, 140, 140));
     auto lightMesh1 = make_shared<Sphere>(Point3(1, -1, 1), 0.1, lightMaterial1 );
     world.add(lightMesh1);
     
-    auto lightMaterial2 = make_shared<Light>(Color3(150, 150, 150));
+    auto lightMaterial2 = make_shared<Light>(Color3(140, 140, 140));
     auto lightMesh2 = make_shared<Sphere>(Point3(-1, 1, 1), 0.1, lightMaterial2 );
     world.add(lightMesh2);
     
-    auto lightMaterial3 = make_shared<Light>(Color3(130, 130, 130));
+    auto lightMaterial3 = make_shared<Light>(Color3(140, 140, 140));
     auto lightMesh3 = make_shared<Sphere>(Point3(-1, -1, 1), 0.1, lightMaterial3 );
     world.add(lightMesh3);
 
@@ -703,13 +707,13 @@ void brickWallNormalMapping() {
     world.add( brickWall );
 
     Renderer renderer( world, image );
-    renderer.samplesPerPixel = 1500;
+    renderer.samplesPerPixel = 300;
     renderer.maxDepth = 10;
     renderer.vFOV = 23;
     renderer.lookFrom = Point3( -3, 0, 5 );
     renderer.lookAt = Point3( 0, 0, 0 );
     renderer.vUp = Vector3( 0, 1, 0 );
-    renderer.background = Color3( 0.2, 0.2, 0.2);
+    renderer.background = Color3(0,0,0 );
     renderer.defocusAngle = 0;
     renderer.focusDistance = 10.0;
     renderer.initialize();
@@ -717,37 +721,127 @@ void brickWallNormalMapping() {
 }
 
 void metalBRDFScene() {
-    const int IMAGE_WIDTH = 800;
-    const double ASPECT_RATIO = 1.0;
+    const int IMAGE_WIDTH = 1920;
+    const double ASPECT_RATIO = 2.20;
     Image image( IMAGE_WIDTH, ASPECT_RATIO );
 
     World world;
     
-    auto lightMaterial3 = make_shared<Light>(Color3(300, 300, 300));
-    auto lightMesh3 = make_shared<Sphere>(Point3(0, 0, 1), 0.1, lightMaterial3 );
-    world.add(lightMesh3);
 
-    shared_ptr< Mesh > brickWall = make_shared< LoadedMesh >("./models/brickWall/model.glb");
+
+// auto lightMaterial = make_shared<Light>(Color3( 30, 30, 30 ));
+//     auto lightMesh = make_shared<Sphere>(Point3( 2, 2, 2 ), 0.1, lightMaterial );
+    // world.add(lightMesh);
+
+// auto lightMaterial1 = make_shared<Light>(Color3( 30, 30, 30 ));
+//     auto lightMesh1 = make_shared<Sphere>(Point3( 200, 600, 100 ), 10, lightMaterial1 );
+    // world.add(lightMesh1);
+
+//  auto lightMaterial2 = make_shared<Light>(Color3( 30, 30, 30 ));
+//     auto lightMesh2 = make_shared<Sphere>(Point3( 400, 600, 100 ), 10, lightMaterial2 );
+    // world.add(lightMesh2);
+
+    // auto lightMaterial3 = make_shared<Light>(Color3( 30, 30, 30 ));
+    // auto lightMesh3 = make_shared<Sphere>(Point3( 800, 600, 100 ), 10, lightMaterial3 );
+    // world.add(lightMesh3);
+
+    // shared_ptr< Mesh > brickWall = make_shared< LoadedMesh >("./models/brickWall/model.glb");
+    shared_ptr< Mesh > brickWall = make_shared< LoadedMesh >("./models/sponza/sponza.glb");
     world.add( brickWall );
 
+    // shared_ptr< Material > diffuseRed = make_shared< Diffuse >( Color3( 1.0, 0.0, 0.0 ) );
+    // shared_ptr< Mesh > sphereMesh = make_shared< Sphere >( Point3( 0.5, 0, -1 ), 0.2, diffuseRed );
+    // world.add( sphereMesh );
+
+    //x is along the bigger side
+    //z is alone the shorter side
+    //y is up and down
+
+// renderer.lookFrom = Point3( 800, 700, 0 );
+//     // renderer.lookFrom = Point3( 0, 0, 8 );
+//     renderer.lookAt = Point3(500, 600, 200 );
+
+    // auto fogBoundary = make_shared< Sphere >( Point3( 0, 0, 0 ), 2000, make_shared< Solid >( Color3( 1.0, 0.0, 0.0 ) ) );
+    // auto fog = make_shared< Fog >( fogBoundary, 0.00002, make_shared< Isotropic >( Color3( 1.0, 1.0, 1.0 ) ) );
+    // world.add( fog );
+
     Renderer renderer( world, image );
-    renderer.samplesPerPixel = 200;
-    renderer.maxDepth = 10;
-    renderer.vFOV = 23;
-    renderer.lookFrom = Point3( -3, 0, 5 );
-    renderer.lookAt = Point3( 0, 0, 0 );
+    renderer.samplesPerPixel = 4;
+    renderer.maxDepth = 4;
+    renderer.vFOV = 90;
+    // renderer.lookFrom = Point3( 800, 600, 0 );
+    // renderer.lookAt = Point3(300, 400, 0 );
+    renderer.lookFrom = Point3( 0, 0, 8 );
+    renderer.lookAt = Point3(0, 0, 0 );
+
     renderer.vUp = Vector3( 0, 1, 0 );
-    // renderer.background = Color3( 0.529, 0.808, 0.92 );
-    renderer.background = Color3( 0, 0, 0 );
+    renderer.background = Color3( 0.529, 0.808, 0.922 );
+    // renderer.background = Color3( 1.0, 0.702, 0.278 );
+    // renderer.background = Color3( 1.0, 0.98, 0.95 ) ;
     renderer.defocusAngle = 0;
     renderer.focusDistance = 10.0;
     renderer.initialize();
     renderer.render();
 }
 
+// void dragon() {
+//     const int IMAGE_WIDTH = 800;
+//     const double ASPECT_RATIO = 1.0;
+//     Image image( IMAGE_WIDTH, ASPECT_RATIO );
+
+//     World world;
+
+//     auto lightMaterial5 = make_shared<Light>(Color3( 2, 2, 2));
+//     auto lightMesh5 = make_shared< Parallelogram >( Point3( -2, 3, -2 ), Vector3( 4, 0, 0 ), Vector3( 0, 0, 4 ), lightMaterial5);
+//     world.add(lightMesh5);
+
+//     auto lightMaterial = make_shared<Light>(Color3( 10, 10, 10));
+//     auto lightMesh = make_shared< Sphere >( Point3( 2, 1, 2 ), 0.1, lightMaterial );
+//     // world.add(lightMesh);
+    
+//     auto lightMaterial1 = make_shared<Light>(Color3(10, 10, 10));
+//     auto lightMesh1 = make_shared<Sphere>(Point3(2, 1, -2), 0.1, lightMaterial1 );
+//     // world.add(lightMesh1);
+    
+//     auto lightMaterial2 = make_shared<Light>(Color3(10, 10, 10));
+//     auto lightMesh2 = make_shared<Sphere>(Point3(-2, 1, 2), 0.1, lightMaterial2 );
+//     // world.add(lightMesh2);
+    
+//     auto lightMaterial3 = make_shared<Light>(Color3(10, 10, 10));
+//     auto lightMesh3 = make_shared<Sphere>(Point3(-2, -1, -2), 0.1, lightMaterial3 );
+//     // world.add(lightMesh3);
+
+//     auto fogBoundary = make_shared< Sphere >( Point3( 0, 0, 0 ), 2000, make_shared< Solid >( Color3( 1.0, 0.0, 0.0 ) ) );
+//     auto fog = make_shared< Fog >( fogBoundary, 0.0001, make_shared< Isotropic >( Color3( 1.0, 1.0, 1.0 ) ) );
+//     // world.add( fog );
+
+//     shared_ptr< Mesh > brickWall = make_shared< LoadedMesh >("./models/dragon/model.glb");
+//     // world.add( brickWall );
+
+//     auto floor = make_shared< Metal >( Color3( 0.6, 0.4, 0.2 ), 0.3 );
+//         auto floor = make_shared< Diffuse >( Color3( 0.6, 0.4, 0.2 ), 0.3 );
+
+//     // world.add( make_shared< Parallelogram >( Point3( -10, 0, -15 ), Vector3( 20, 0, 0 ), Vector3( 0, 0, 30 ), floor ) );
+//     auto ground = make_shared< Parallelogram >( Point3( -1, 0, -1 ), Vector3( 2, 0, 0 ), Vector3( 0, 0, 2 ), floor );
+//     world.add( ground );
+
+//     Renderer renderer( world, image );
+//     renderer.samplesPerPixel = 200;
+//     renderer.maxDepth = 10;
+//     renderer.vFOV = 23;
+//     renderer.lookFrom = Point3( -3, 4, 6 );
+//     renderer.lookAt = Point3( 0, 0, 0 );
+//     renderer.vUp = Vector3( 0, 1, 0 );
+//     renderer.background = Color3( 0,0,0);
+//     renderer.defocusAngle = 0;
+//     renderer.focusDistance = 10.0;
+//     renderer.initialize();
+//     renderer.render();
+// }
+
 int main(){
     
-    int scene = 17;
+    int scene = 14;
 
     switch( scene ){
         case 1: classicScene();  break;
@@ -767,6 +861,7 @@ int main(){
         case 15: BRDF(); break;
         case 16: brickWallNormalMapping(); break;
         case 17: metalBRDFScene(); break;
+        // case 18: dragon(); break;
     }
     
     return 0;

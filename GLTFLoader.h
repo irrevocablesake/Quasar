@@ -78,33 +78,54 @@ class GLTFLoader {
                 std::clog << "ASSIMP Error:: No Scene or Meshes Found \n";
             }
 
+//      for (unsigned int i = 0; i < scene->mRootNode->mNumMeshes; ++i) {
+//     unsigned int meshIndex = scene->mRootNode->mMeshes[i];
+//     const aiMesh* mesh = scene->mMeshes[meshIndex];
+
+//     aiVector3D center(0,0,0);
+//     for (unsigned int v = 0; v < mesh->mNumVertices; ++v) {
+//         center += mesh->mVertices[v];
+//     }
+//     center /= mesh->mNumVertices;
+
+//     std::cout << "Mesh index: " << meshIndex
+//               << " (name: " << mesh->mName.C_Str() << ")\n";
+//     std::cout << "Center position: (" 
+//               << center.x << ", "
+//               << center.y << ", "
+//               << center.z << ")\n";
+// }
+
             for( unsigned int i = 0; i < scene -> mNumMeshes; i++ ){
                 aiMesh *mesh = scene -> mMeshes[ i ];
                 aiMaterial *material = scene -> mMaterials[ mesh -> mMaterialIndex ];
 
-                if( mesh -> HasTangentsAndBitangents() ){
-                    std::clog << "tangents and bitangents found" << std::endl;
-                }
+                // if( mesh -> HasTangentsAndBitangents() ){
+                //     std::clog << "tangents and bitangents found" << std::endl;
+                // }
 
                 MaterialProperties properties;
 
                 properties.diffuseColor = getDiffuseColor(material);
-                properties.roughnessFactor = getRoughnessFactor( material );
-                properties.diffuseTexture = loadTextureMap( aiTextureType_DIFFUSE, material );
-                if( properties.diffuseTexture == nullptr ){
-                    properties.diffuseTexture = make_shared< solidColor >( properties.diffuseColor );
+                properties.roughnessFactor = getRoughnessFactor(material);
+                properties.diffuseTexture = loadTextureMap(aiTextureType_DIFFUSE, material);
+                if (properties.diffuseTexture == nullptr)
+                {
+                    properties.diffuseTexture = make_shared<solidColor>(properties.diffuseColor);
                 }
-                properties.normalTexture = loadTextureMap( aiTextureType_NORMALS, material );
-                if( properties.normalTexture == nullptr ){
-                    properties.normalTexture = make_shared< solidColor>( Color3( 0.5, 0.5, 1.0 ) );
+                properties.normalTexture = loadTextureMap(aiTextureType_NORMALS, material);
+                if (properties.normalTexture == nullptr)
+                {
+                    properties.normalTexture = make_shared<solidColor>(Color3(0.5, 0.5, 1.0));
                 }
                 properties.roughnessFactor = 1.0;
                 properties.subSurfaceFactor = 0.0;
-                properties.normalTextureFactor = 1;
-                properties.anisotropicFactor = 1.0;
+                properties.normalTextureFactor = 3;
+                properties.anisotropicFactor = 0.1;
                 properties.metalFactor = 1.0;
-
+                properties.fuzz = 0.5;
                 std::shared_ptr< Material > baseMaterial = make_shared<DisneyBRDF>( properties );
+                // std::cout << "metal" << std::endl;
                 
                 for( unsigned int faceIndex = 0; faceIndex < mesh -> mNumFaces; faceIndex++ ){
                     aiFace face = mesh -> mFaces[ faceIndex ];

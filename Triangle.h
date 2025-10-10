@@ -105,7 +105,7 @@ class Triangle : public shape2D {
                     tangentNormal.x() * tangent.z() + tangentNormal.y() * bitangent.z() + tangentNormal.z() * normal.z()
             ));
                 
-            // worldNormal = Vector3( worldNormal.x() * material->getNormalTextureFactor(), worldNormal.y() * material -> getNormalTextureFactor(), worldNormal.z() );
+            worldNormal = Vector3( worldNormal.x() * material->getNormalTextureFactor(), worldNormal.y() * material -> getNormalTextureFactor(), worldNormal.z() );
 
             intersectionManager.t = t;
             intersectionManager.point = intersectedPoint;
@@ -114,7 +114,7 @@ class Triangle : public shape2D {
             bool frontFace = dot( ray.direction(), normal ) < 0;
             intersectionManager.frontFace = frontFace;
             intersectionManager.normal = frontFace ? normal : -normal;
-            intersectionManager.shadingNormal = worldNormal;
+            intersectionManager.shadingNormal = intersectionManager.normal;
 
             return true;
         }
@@ -157,7 +157,7 @@ class Triangle : public shape2D {
             TangentB = B;
             TangentC = C;
 
-            hasTangent = true;
+            hasTangent = false;
         }
 
         void setBiTangents( Vector3 A, Vector3 B, Vector3 C ){
