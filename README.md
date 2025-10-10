@@ -138,7 +138,7 @@ Normal maps are pretty crucial, because if properly configured thay bring us clo
 ### Volumetrics
 
 <p align="center">
-  <img src="images/portfolio/info_2/latestHeroRender.png" width="80%"/>
+  <img src="images/portfolio/info_2/latestHeroRender.png" width="70%"/>
   <br>
   <em>Volumetrics</em>
 </p>
@@ -164,7 +164,7 @@ These implementations use a clever trick of transforming the ray to the **local 
 ### Cornell Box
 
 <p align="center">
-  <img src="images/portfolio/CornellBox.png" width="80%"/>
+  <img src="images/portfolio/CornellBox.png" width="70%"/>
   <br>
   <em>Cornell Box</em>
 </p>
