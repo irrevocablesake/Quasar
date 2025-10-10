@@ -110,3 +110,5 @@ Normal maps deserve their own section because of the sweet maths that goes behin
 A normal map is a texture map in 3D computer graphics that stores directional information in an RGB image to simulate fine surface detail, such as bumps, grooves, and scratches, without altering the model's actual geometry. It basically modifies how light reflects off of a surface.
 
 Normal maps are pretty crucial, because if properly configured thay bring us closer to realism. 
+
+## Cornell Box
