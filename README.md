@@ -165,3 +165,65 @@ Quasar has implemented them in the form of a Texture / Material, one has to defi
 </div>
 
 Anti-Aliasing helps reduce the jagged, stair-step edges that can appear in digital images, especially along diagonal lines or curves. In the real world, visual information is continuous, but in a rendered image, we approximate it with a grid of discrete pixels. By taking multiple samples per pixel and averaging the results, anti-aliasing creates smoother transitions and more realistic gradients, resulting in a cleaner and more natural-looking image.
+
+## Depth of Field ( DOF )
+
+You already must have had experience with depth of Field, when you click photos or even watch vlogs on youtube. You might see that the speaker is sharp but the background is blurred, that is due to depth of field
+
+The "Field" in "Depth of Field" is merely an area in which objects appear sharp, the "Depth" in "Depth of Field" is like "how deep is the field", and mostly we are interested in controlling this so called "Depth". Unfortunately for us, according to our current implementation ( based on book ), we wouldn't be able to control the "deepness" of the field, rather for us ~ it's a "field" where object will appear in focus but more like a "Plane" and what ever is in the plane region will appear sharp. Things further before or after the plane will get blurred.
+
+Two things can control Depth of Field:
+- De-focus Angle: If there is a blur section in an image, then how much to blur it
+- De-focus Distance: When to place the plane, at this distance everything will be sharp
+
+#### De-focus Angle "How much to blur the blurry regions"
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/defocusAngle/0.0.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Defocus Angle 1.0
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/defocusAngle/0.5.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Defocus Angle 0.5
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/defocusAngle/1.0.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Defocus Angle 1.0
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+#### De-focus Distance "What region should appear sharp"
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/dportfolio/info_1/defocusDistance/render1.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Defocus Distance
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/defocusDistance/render2.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Defocus Distance
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
