@@ -8,7 +8,7 @@
 
 After spending months and casting **trillions** of rays, all the work has finally cumulated into "_Quasar_" - my very own **_Rendering Engine_** based on Path Tracing. The Hero Render is a testimony to that statement, a dragon - which symbolizes power, courage and authority.
 
-This repository contains a **_C++_** and **_Python_** implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections, I will walk you through the feature set and will conclude by mentioning the plans for future. 
+This repository contains a **_C++_** and **_Python_** implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections ( each section has visuals ), I will walk you through the feature set and will conclude by mentioning the plans for future. 
 
 **TIP:** Dark Mode would enhance the experience of reading, but ofcourse it's not a necessity!
 
@@ -33,6 +33,7 @@ This repository contains a **_C++_** and **_Python_** implementation for the ren
 - [Bounding Volume Hierarchies ( BVH )](#bounding-volume-hierarchies--bvh-)
 - [Multi-Threading](#multi-threading)
 - [UI](#ui)
+- [Author's Note](#)
 
 ### GLB & GLTF 
 
@@ -524,3 +525,9 @@ For other small scenes in here, i could see time going down from mins to seconds
 https://github.com/user-attachments/assets/c5a35ebc-be32-4be4-a020-530870df95fb
 
 Qusar uses SFMl to display the result into window, the result is refreshed every few milliseconds. It consists of auto-save which is triggered the moment rendering is done, if one wants to save manually then pressing "s" can do that. Additionally, it also displays some additional information towards the top-left cornerof the window
+
+## Author's Note:
+
+Quasar had a very hopeful conception, it was supposed to be a **CPU** based PathTracing Engine ~ I implemented it to deepen my knowledge of how exactly Rendering Engines work, eventually I started loosing a grip of that journey and thought about extending Quasar to **Vulkan** ( based on **Compute Shader** ), so I would be able to learn Vulkan ( coming from an **OpenGL** background ). But after spending more time, I have come to a conclusion to let Quasar be what it was meant for a CPU Rendering Engine, the only thing that is going to be added is: **Disney BRDF**.
+
+As for my next journey, my knowledge about Path Tracing Engines is wayy better than what I had started with. The obvious next goal is to master **BRDFs**, **BTDFs**, **BSDFs** and **BSSDFs**, Quasar is going to teach me that and once done with it I will be working on a Vulkan implementation ( albiet more advanced )
