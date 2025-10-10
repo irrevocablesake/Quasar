@@ -12,7 +12,7 @@ This repository contains a c++ and python implementation for the rendering engin
 
 ## Index
 
-- [GLB / GLTF](#GLB-&-GLTF)
+- [GLB / GLTF](#glb--gltf)
 - [Shading](#Shading)
 - [Lights](#Lights)
   - [Ambient Light](#Ambient-Light)
