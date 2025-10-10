@@ -12,7 +12,7 @@ This repository contains a c++ and python implementation for the rendering engin
 
 ## Index
 
-- [GLB & GLTF](#GLB-&-GLTF)
+- [GLB / GLTF](#GLB-&-GLTF)
 - [Shading](#Shading)
 - [Lights](#Lights)
   - [Ambient Light](#Ambient-Light)
@@ -24,13 +24,13 @@ This repository contains a c++ and python implementation for the rendering engin
 - [Volumetrics](#Volumetrics)
 - [Material Showcase](#Material-Showcase)
   - [Basic Materials](#Basic-Materials)
-- [Anti Aliasing](#Anti-Aliasing)
+- [Anti-Aliasing](#Anti-Aliasing)
 - [Depth Of Field ( DOF )](#Depth-of-Field-(-DOF-))
 - [Field Of View ( FOV )](#Field-Of-View-(-FOV-))
 - [Max Depth & SPP](#Max-Depth-&-SPP)
 - [Low Depth, Low SPP and Bounded Reflections](#Low-Depth-+-Low-SPP-and-Bounced-Reflections)
 - [Mesh Types and Transformations](#Mesh-Types-and-Transformations)
-- [Multi Threading](#Multi-Threading)
+- [Multi-Threading](#Multi-Threading)
 - [UI](#UI)
 
 ## GLB & GLTF 
