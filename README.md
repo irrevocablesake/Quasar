@@ -112,3 +112,13 @@ A normal map is a texture map in 3D computer graphics that stores directional in
 Normal maps are pretty crucial, because if properly configured thay bring us closer to realism. 
 
 ## Cornell Box
+
+<p align="center">
+  <img src="images/portfolio/CornellBox.png" width="80%"/>
+  <br>
+  <em>Metal Fox</em>
+</p>
+
+The Cornell box is a test scene designed to evaluate the accuracy of rendering software by comparing a rendered image with a photograph of a real-world model under the same lighting conditions.
+
+Here's a visual for Cornell's Box rendered using Quasar.
