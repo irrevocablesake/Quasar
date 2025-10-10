@@ -122,3 +122,15 @@ Normal maps are pretty crucial, because if properly configured thay bring us clo
 The Cornell box is a test scene designed to evaluate the accuracy of rendering software by comparing a rendered image with a photograph of a real-world model under the same lighting conditions.
 
 Here's a visual for Cornell's Box rendered using Quasar.
+
+## Volumetrics
+
+<p align="center">
+  <img src="images/portfolio/info2/heroRender.png" width="80%"/>
+  <br>
+  <em>Metal Fox</em>
+</p>
+
+Volumetrics is the idea of simulating and rendering participating medium. Mediums that scatter, absorb or emit light as it travels through them. Examples like: Fog, Smoke, Dust and Most.
+
+Quasar has implemented them in the form of a Texture / Material, one has to define the boundary of such a medium using a Mesh and then use the provided Isotropic Material, configure the density of the medium and voila! You have a Fog or mist or anything in between or outside depending upon the density.
