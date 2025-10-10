@@ -135,6 +135,125 @@ Volumetrics is the idea of simulating and rendering participating medium. Medium
 
 Quasar has implemented them in the form of a Texture / Material, one has to define the boundary of such a medium using a Mesh and then use the provided Isotropic Material, configure the density of the medium and voila! You have a Fog or mist or anything in between or outside depending upon the density.
 
+## Material Showcase
+
+### Basic Materials
+
+This section demonstrates different materials that exist, and how they interact with light ( with respect to physics ). Each Material implemented, takes care of two things: ***attenuation*** and ***scattering***. And depending upon just two factors we have created a bunch of materials ( kind of nuanced explanation ). A quick glance at list of materials that are present in the code base:
+- Normal
+- Diffuse 
+- Solid
+- Metal
+- Dielectric
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/solid/render.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Solid - Flat-colored material,
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/diffuse/render.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Diffuse - A Lambertian surface that scatters light evenly in all directions.
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/normal/render.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Normal - Visualizes the normal vectors
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+### Metal
+
+Metal, as a material consists of two major properties: ***reflectance*** and ***color*** of the metal itself. The reflectance can also have a "***fuzz***" factor, just like in real life. Below you can see a progression of fuzz factor from shiny metal ball to almost diffuse metal ball ( acts just like a diffuse spehre material )
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/metal/fuzz0.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Metal - 0 fuzz
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/metal/fuzz0.5.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Metal 0.5 fuzz
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/metal/fuzz1.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Metal 1 fuzz
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+Just to showcase the "magic" of PathTracing, I have also created the following two scenarios:
+- ***metal + metal reflections***: You can see the infinite reflection pattern on both the spheres ( just like real life )
+- ***metal + dielectric reflections***: You can see the faint reflections of a glass sphere and also the glass sphere reflecting + refracting the metal sphere
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/metal/dielectricIntoMetalReflection.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Dielectric Reflecting Into Metal
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/metal/metalIntoMetalreflection.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Metal Reflecting Into Metal
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+###  Dielectric
+
+***Dielectrics*** are materials that are weak conductors of electricty, like wool, water, sand, air etc.. Here we tried to simulate "***glass***" and that too with reflection, refraction and total internal reflection. You might feel that the glass balls are floating due to abscence of shadow but even in real life glass balls rarely have a dense shadow. If you focus at the bottom center of the sphere, you might see a faint patch of shadow
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/dielectric/dielctric.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Dielectric - RI: ( 1.00 / 1.33 )
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/dielectric/dielectricInsideDielectricReRender.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Dielectric Inside Dielectric - RI1 ( outer ): ( 1.50 ) + RI2 ( inner ): ( 1.00 / 1.50 )
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 ## Anti - Aliasing
 
 <div align="center">
