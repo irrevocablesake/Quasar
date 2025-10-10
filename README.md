@@ -43,14 +43,18 @@ Fortunately, Quasar is capable of working with both the situations. All one has 
 
 ## Lights
 
+<p align="center">
+  <img src="images/portfolio/lights.png" width="80%"/>
+  <br>
+  <em>Metal Fox</em>
+</p>
+
 In Quasar, there are two types of light sources:
 - Ambient
 - Sources casting lights
 
 The engine itself supports Global Illumination, as a result of the Path Tracing algorithm, which means it will convey the physics of light upto a certain extent. In this case, the colors from different light sources get mixed and result into a 3rd color. The current implementation includes lights as a material, so all one has to do is apply a material to mesh.
 
-<p align="center">
-  <img src="images/portfolio/lights.png" width="80%"/>
-  <br>
-  <em>Metal Fox</em>
-</p>
+## Textures
+
+Textures help us to add the intricacies to the materials, they are also an important part of material pipeline in Quasar. The reason being even solid colours are implemented as Textures to maintain uniformity.
