@@ -15,6 +15,7 @@ This repository contains a c++ and python implementation for the rendering engin
 - [GLB / GLTF](#glb--gltf)
 - [Shading](#shading)
 - [Lights](#lights)
+  - [Source Light](#Source-Light)
   - [Ambient Light](#ambient-light)
 - [Textures](#textures)
 - [Motion Blur](#motion-blur)
@@ -23,7 +24,6 @@ This repository contains a c++ and python implementation for the rendering engin
 - [Cornell Box](#cornell-box)
 - [Volumetrics](#volumetrics)
 - [Material Showcase](#material-showcase)
-  - [Basic Materials](#Basic-Materials)
 - [Anti-Aliasing](#anti-aliasing)
 - [Depth Of Field ( DOF )](#depth-of-field--dof-)
 - [Field Of View ( FOV )](#field-Of-view--fov-)
@@ -33,7 +33,7 @@ This repository contains a c++ and python implementation for the rendering engin
 - [Multi-Threading](#multi-threading)
 - [UI](#ui)
 
-## GLB & GLTF 
+### GLB & GLTF 
 
 <p align="center">
   <img src="images/portfolio/sponzaAtrium.png" width="100%"/>
@@ -50,7 +50,7 @@ As of now, everything is loaded as triangles, for materials GLTF format uses Pri
 
 Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remaining values of Principled BSDF are a WIP, being implemented as Disney BRDF.
 
-## Shading
+### Shading
 
 <p align="center">
   <img src="images/portfolio/SmoothFlatShading.png" width="100%"/>
@@ -64,26 +64,40 @@ Lighting is mostly a play of normals and how we reflect the incoming ray. This l
 
 Fortunately, Quasar is capable of working with both the situations. All one has to do is make sure the appropriate shading mode is applies before exporting GLB / GLTF.
 
-## Lights
+### Lights
+
+In Quasar, there are two types of light sources:
+- Sources Light
+- Ambient Light
+
+The engine itself supports Global Illumination, as a result of the Path Tracing algorithm, which means it will convey the physics of light upto a certain extent. The current implementation includes lights as a material, so all one has to do is apply a material to mesh.
+
+#### Source Light
 
 <p align="center">
   <img src="images/portfolio/lights.png" width="100%"/>
   <br>
-  <em>Metal Fox</em>
+  <em>Source Light</em>
 </p>
 
-In Quasar, there are two types of light sources:
-- Ambient
-- Sources casting lights
+In this case, Quad geometry is used to create the shape of light, and one can see that the colors from different light sources get mixed and result into a 3rd color.
 
-The engine itself supports Global Illumination, as a result of the Path Tracing algorithm, which means it will convey the physics of light upto a certain extent. In this case, the colors from different light sources get mixed and result into a 3rd color. The current implementation includes lights as a material, so all one has to do is apply a material to mesh.
+#### Ambient Light
 
-## Textures
+<p align="center">
+  <img src="images/portfolio/metalNonMetal.png" width="100%"/>
+  <br>
+  <em>Ambient Light</em>
+</p>
+
+Ambient light is the base layer of general illumination that fills a space, providing the overall brightness and establishing the mood or atmosphere. This feature also implies that we don't need any explicit light as the ambient light will contribute enough to generate a visually appealing result, albeit that depends upon the configuration of the Ambient Light.
+
+### Textures
 
 <p align="center">
   <img src="images/portfolio/textures.png" width="100%"/>
   <br>
-  <em>Metal Fox</em>
+  <em>Textures</em>
 </p>
 
 Textures help us to add the intricacies to the materials, they are also an important part of material pipeline in Quasar. The reason being even solid colours are implemented as Textures to maintain uniformity.
@@ -94,38 +108,28 @@ There are 2 types of textures in the pipeline:
 
 Like any other library, Textures are loaded asna separate entity, then attached to the material to be used during Rendering. One important thing for Image Textures is UV coordinates, which can either be loaded through GLB / GLTF or computed on the fly using barycentric coordinates
 
-## Motion Blur
+### Motion Blur
 
 <p align="center">
   <img src="images/portfolio/motionBlur.png" width="100%"/>
   <br>
-  <em>Metal Fox</em>
+  <em>Motion Blur</em>
 </p>
 
 Motion blur is a visual effect that simulates the streaking or blurring of moving objects in a scene, caused by the relative motion between the camera and objects during the exposure time of a frame. In our case, the camera always stays stable and the object moves, this movement is described by assigning two positions to our desired object: the start position and the end position
 
 The Hero Render is a good example that encapsulates the entire idea, it also proves how true out implementation is to physical reality as it shows all the reflections of the surrounding light whilst being in motion.
 
-## Bounding Volume Hierarchies ( BVH )
+### Bounding Volume Hierarchies ( BVH )
 
 A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tracing by organizing scene geometry into nested bounding volumes, enabling efficient ray-object intersection tests, which in turn translates directly to improved rendering time. Earlier, without BVH, certain scenes took 12-14 hours, but with BVH that time came down to 1 hour
 
-## Ambient Light
-
-<p align="center">
-  <img src="images/portfolio/metalNonMetal.png" width="100%"/>
-  <br>
-  <em>Metal Fox</em>
-</p>
-
-Ambient light is the base layer of general illumination that fills a space, providing the overall brightness and establishing the mood or atmosphere. This feature also implies that we don't need any explicit light as the ambient light will contribute enough to generate a visually appealing result, albeit that depends upon the configuration of the Ambient Light.
-
-## Normal Map
+### Normal Map
 
 <p align="center">
   <img src="images/portfolio/normalNoNormal.png" width="100%"/>
   <br>
-  <em>Metal Fox</em>
+  <em>Normal Map</em>
 </p>
 
 Normal maps deserve their own section because of the sweet maths that goes behind them. Tangents, Bi-Tangents and Normals are the driving factor in this case. This orthogonal basis can either be loaded from GLB / GLTF or Quasar can generate them on the fly, just like UVs
@@ -134,33 +138,31 @@ A normal map is a texture map in 3D computer graphics that stores directional in
 
 Normal maps are pretty crucial, because if properly configured thay bring us closer to realism. 
 
-## Cornell Box
+### Cornell Box
 
 <p align="center">
   <img src="images/portfolio/CornellBox.png" width="100%"/>
   <br>
-  <em>Metal Fox</em>
+  <em>Cornell Box</em>
 </p>
 
 The Cornell box is a test scene designed to evaluate the accuracy of rendering software by comparing a rendered image with a photograph of a real-world model under the same lighting conditions.
 
 Here's a visual for Cornell's Box rendered using Quasar.
 
-## Volumetrics
+### Volumetrics
 
 <p align="center">
   <img src="images/portfolio/info_2/latestHeroRender.png" width="100%"/>
   <br>
-  <em>Metal Fox</em>
+  <em>Volumetrics</em>
 </p>
 
 Volumetrics is the idea of simulating and rendering participating medium. Mediums that scatter, absorb or emit light as it travels through them. Examples like: Fog, Smoke, Dust and Most.
 
 Quasar has implemented them in the form of a Texture / Material, one has to define the boundary of such a medium using a Mesh and then use the provided Isotropic Material, configure the density of the medium and voila! You have a Fog or mist or anything in between or outside depending upon the density.
 
-## Material Showcase
-
-### Basic Materials
+### Material Showcase
 
 This section demonstrates different materials that exist, and how they interact with light ( with respect to physics ). Each Material implemented, takes care of two things: ***attenuation*** and ***scattering***. And depending upon just two factors we have created a bunch of materials ( kind of nuanced explanation ). A quick glance at list of materials that are present in the code base:
 - Normal
@@ -196,7 +198,7 @@ This section demonstrates different materials that exist, and how they interact 
 </table>
 </div>
 
-### Metal
+#### Metal
 
 Metal, as a material consists of two major properties: ***reflectance*** and ***color*** of the metal itself. The reflectance can also have a "***fuzz***" factor, just like in real life. Below you can see a progression of fuzz factor from shiny metal ball to almost diffuse metal ball ( acts just like a diffuse spehre material )
 
@@ -252,7 +254,7 @@ Just to showcase the "magic" of PathTracing, I have also created the following t
 </table>
 </div>
 
-###  Dielectric
+####  Dielectric
 
 ***Dielectrics*** are materials that are weak conductors of electricty, like wool, water, sand, air etc.. Here we tried to simulate "***glass***" and that too with reflection, refraction and total internal reflection. You might feel that the glass balls are floating due to abscence of shadow but even in real life glass balls rarely have a dense shadow. If you focus at the bottom center of the sphere, you might see a faint patch of shadow
 
@@ -277,7 +279,7 @@ Just to showcase the "magic" of PathTracing, I have also created the following t
 </table>
 </div>
 
-## Anti Aliasing
+### Anti Aliasing
 
 <div align="center">
 <table>
@@ -308,7 +310,7 @@ Just to showcase the "magic" of PathTracing, I have also created the following t
 
 Anti-Aliasing helps reduce the jagged, stair-step edges that can appear in digital images, especially along diagonal lines or curves. In the real world, visual information is continuous, but in a rendered image, we approximate it with a grid of discrete pixels. By taking multiple samples per pixel and averaging the results, anti-aliasing creates smoother transitions and more realistic gradients, resulting in a cleaner and more natural-looking image.
 
-## Depth of Field ( DOF )
+### Depth of Field ( DOF )
 
 You already must have had experience with depth of Field, when you click photos or even watch vlogs on youtube. You might see that the speaker is sharp but the background is blurred, that is due to depth of field
 
@@ -318,7 +320,7 @@ Two things can control Depth of Field:
 - De-focus Angle: If there is a blur section in an image, then how much to blur it
 - De-focus Distance: When to place the plane, at this distance everything will be sharp
 
-#### Defocus Angle "How much to blur the blurry regions"
+##### Defocus Angle "How much to blur the blurry regions"
 
 <div align="center">
 <table>
@@ -347,7 +349,7 @@ Two things can control Depth of Field:
 </table>
 </div>
 
-#### Defocus Distance "What region should appear sharp"
+##### Defocus Distance "What region should appear sharp"
 
 <div align="center">
 <table>
@@ -370,7 +372,7 @@ Two things can control Depth of Field:
 </table>
 </div>
 
-## Field Of View ( FOV )
+### Field Of View ( FOV )
 
 Field of View controls how wide the camera can see. A smaller FOV gives a zoomed-in, narrow perspective, while a larger FOV creates a wide-angle view. We use vFOV here, but also hFOV would have been fine. In our case we supply the vFOV and the dimensions are automatically adjusted
 
@@ -395,7 +397,7 @@ Field of View controls how wide the camera can see. A smaller FOV gives a zoomed
 </table>
 </div>
 
-## Max Depth & SPP
+### Max Depth & SPP
 
 In ray tracing, max depth defines the maximum number of times a ray is allowed to bounce (or recurse) before it's terminated. Each bounce represents a light interaction — such as reflection, refraction, or scattering.
 
@@ -461,7 +463,7 @@ Fun Fact: Since SPP adds extra rays, the extra rays tend to be additional cost. 
 </table>
 </div>
 
-## Low Depth, Low SPP and Bounced Reflections
+### Low Depth, Low SPP and Bounced Reflections
 
 You can see that low Depth + low SPP, would result into a grainy and dark image because not enough rays are spawned which results in bad sampling and low Depth causes less infoinformation to be gathered. In the right image, you can see that a image generated with good parameters would give a good anti-aliased + tinted reflections + smooth image
 
@@ -486,7 +488,7 @@ You can see that low Depth + low SPP, would result into a grainy and dark image 
 </table>
 </div>
 
-## Mesh Types and Transformations
+### Mesh Types and Transformations
 
 Quasar has a few in built types of geometries, which can be extended further easily. Majorly there are two types of geometries:
 - Primitives ( Sphere / Quad / Triangle )
@@ -500,7 +502,7 @@ These implementations use a clever trick of transforming the ray to the local co
 
 Note: When reading the GLB, we just take the data and convert to our class of Triangles and Composites
 
-## Multi Threading
+### Multi Threading
 
 The nature of graphics rendering is embarrassingly parallel, it's like "hey, this is the process to calculate the color of a pixel, can you apply it to millions of pixels"?
 
@@ -518,7 +520,7 @@ The Volumetrics scene is massive and complex: 1000 spheres, caustics, Fog, 10k s
 
 For other small scenes in here, i could see time going down from mins to seconds or hours to mins.
 
-## UI
+### UI
 
 https://github.com/user-attachments/assets/c5a35ebc-be32-4be4-a020-530870df95fb
 
