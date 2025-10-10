@@ -1,7 +1,7 @@
 # Quasar - 3D Rendering Engine
 
 <p align="center">
-  <img src="images/portfolio/motionBlur.png" width="80%"/>
+  <img src="images/portfolio/motionBlur.png" width="100%"/>
   <br>
   <em>A Hero Render</em>
 </p>
@@ -13,7 +13,7 @@ This repository contains a c++ and python implementation for the rendering engin
 ## GLB / GLTF 
 
 <p align="center">
-  <img src="images/portfolio/sponzaAtrium.png" width="80%"/>
+  <img src="images/portfolio/sponzaAtrium.png" width="100%"/>
   <br>
   <em>Classic Sponza Atrium</em>
 </p>
@@ -30,7 +30,7 @@ Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remai
 ## Shading
 
 <p align="center">
-  <img src="images/portfolio/SmoothFlatShading.png" width="80%"/>
+  <img src="images/portfolio/SmoothFlatShading.png" width="100%"/>
   <br>
   <em>Shading Types</em>
 </p>
@@ -44,7 +44,7 @@ Fortunately, Quasar is capable of working with both the situations. All one has 
 ## Lights
 
 <p align="center">
-  <img src="images/portfolio/lights.png" width="80%"/>
+  <img src="images/portfolio/lights.png" width="100%"/>
   <br>
   <em>Metal Fox</em>
 </p>
@@ -58,7 +58,7 @@ The engine itself supports Global Illumination, as a result of the Path Tracing 
 ## Textures
 
 <p align="center">
-  <img src="images/portfolio/textures.png" width="80%"/>
+  <img src="images/portfolio/textures.png" width="100%"/>
   <br>
   <em>Metal Fox</em>
 </p>
@@ -74,7 +74,7 @@ Like any other library, Textures are loaded asna separate entity, then attached 
 ## Motion Blur
 
 <p align="center">
-  <img src="images/portfolio/motionBlur.png" width="80%"/>
+  <img src="images/portfolio/motionBlur.png" width="100%"/>
   <br>
   <em>Metal Fox</em>
 </p>
@@ -90,7 +90,7 @@ A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tra
 ## Ambient Light
 
 <p align="center">
-  <img src="images/portfolio/metalNonMetal.png" width="80%"/>
+  <img src="images/portfolio/metalNonMetal.png" width="100%"/>
   <br>
   <em>Metal Fox</em>
 </p>
@@ -100,7 +100,7 @@ Ambient light is the base layer of general illumination that fills a space, prov
 ## Normal Map
 
 <p align="center">
-  <img src="images/portfolio/normalNoNormal.png" width="80%"/>
+  <img src="images/portfolio/normalNoNormal.png" width="100%"/>
   <br>
   <em>Metal Fox</em>
 </p>
@@ -114,7 +114,7 @@ Normal maps are pretty crucial, because if properly configured thay bring us clo
 ## Cornell Box
 
 <p align="center">
-  <img src="images/portfolio/CornellBox.png" width="80%"/>
+  <img src="images/portfolio/CornellBox.png" width="100%"/>
   <br>
   <em>Metal Fox</em>
 </p>
@@ -126,7 +126,7 @@ Here's a visual for Cornell's Box rendered using Quasar.
 ## Volumetrics
 
 <p align="center">
-  <img src="images/portfolio/info_2/latestHeroRender.png" width="80%"/>
+  <img src="images/portfolio/info_2/latestHeroRender.png" width="100%"/>
   <br>
   <em>Metal Fox</em>
 </p>
@@ -497,6 +497,6 @@ For other small scenes in here, i could see time going down from mins to seconds
 
 ## UI
 
- <video src="images/portfolio/RenderingVideo.mp4"></video>
+https://github.com/user-attachments/assets/c5a35ebc-be32-4be4-a020-530870df95fb
 
 Qusar uses SFMl to display the result into window, the result is refreshed every few milliseconds. It consists of auto-save which is triggered the moment rendering is done, if one wants to save manually then pressing "s" can do that. Additionally, it also displays some additional information towards the top-left cornerof the window
