@@ -497,6 +497,6 @@ For other small scenes in here, i could see time going down from mins to seconds
 
 ## UI
 
- <video src="images/portfolio/RenderingVideo.mp4" />
+ <video src="images/portfolio/RenderingVideo.mp4"></video>
 
 Qusar uses SFMl to display the result into window, the result is refreshed every few milliseconds. It consists of auto-save which is triggered the moment rendering is done, if one wants to save manually then pressing "s" can do that. Additionally, it also displays some additional information towards the top-left cornerof the window
