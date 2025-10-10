@@ -145,7 +145,9 @@ Normal maps are pretty crucial, because if properly configured thay bring us clo
 
 Volumetrics is the idea of simulating and rendering participating medium. Mediums that scatter, absorb or emit light as it travels through them. Examples like: Fog, Smoke, Dust and Most.
 
-Quasar has implemented them in the form of a Texture / Material, one has to define the boundary of such a medium using a Mesh and then use the provided **Isotropic Material**, configure the density of the medium and voila! You have a Fog or mist or anything in between or outside depending upon the density.
+Quasar has implemented them in the form of a Texture / Material, one has to define the boundary of such a medium using a Mesh and then use the provided **Isotropic Material**, configure the density of the medium and voila! You have a Fog or mist or anything in between or outside depending upon the density. 
+
+**Note:** In this website, most of the images with dark background have a volumetric effect, albeit with a very low density, mostly it being visible in dark mode, as white usually overshadows it.
 
 ### Mesh Types and Transformations
 
