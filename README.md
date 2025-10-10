@@ -137,4 +137,31 @@ Quasar has implemented them in the form of a Texture / Material, one has to defi
 
 ## Anti - Aliasing
 
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/antiAliasing/spp1-upscaled.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          SPP 1
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/antiAliasing/spp100-upscaled.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          SPP 100
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/antiAliasing/spp500-upscaled.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          SPP 500
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 Anti-Aliasing helps reduce the jagged, stair-step edges that can appear in digital images, especially along diagonal lines or curves. In the real world, visual information is continuous, but in a rendered image, we approximate it with a grid of discrete pixels. By taking multiple samples per pixel and averaging the results, anti-aliasing creates smoother transitions and more realistic gradients, resulting in a cleaner and more natural-looking image.
