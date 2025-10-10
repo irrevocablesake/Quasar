@@ -70,3 +70,15 @@ There are 2 types of textures in the pipeline:
 - Image
 
 Like any other library, Textures are loaded asna separate entity, then attached to the material to be used during Rendering. One important thing for Image Textures is UV coordinates, which can either be loaded through GLB / GLTF or computed on the fly using barycentric coordinates
+
+## Motion Blur
+
+<p align="center">
+  <img src="images/portfolio/motionBlur.png" width="80%"/>
+  <br>
+  <em>Metal Fox</em>
+</p>
+
+Motion blur is a visual effect that simulates the streaking or blurring of moving objects in a scene, caused by the relative motion between the camera and objects during the exposure time of a frame. In our case, the camera always stays stable and the object moves, this movement is described by assigning two positions to our desired object: the start position and the end position
+
+The Hero Render is a good example that encapsulates the entire idea, it also proves how true out implementation is to physical reality as it shows all the reflections of the surrounding light whilst being in motion.
