@@ -227,3 +227,28 @@ Two things can control Depth of Field:
   </tbody>
 </table>
 </div>
+
+## FOV
+
+Field of View controls how wide the camera can see. A smaller FOV gives a zoomed-in, narrow perspective, while a larger FOV creates a wide-angle view. We use vFOV here, but also hFOV would have been fine. In our case we supply the vFOV and the dimensions are automatically adjusted
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/fov/20.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          FOV 20
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/fov/90.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          FOV 90
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
