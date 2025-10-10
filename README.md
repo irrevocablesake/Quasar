@@ -12,7 +12,7 @@ This repository contains a c++ and python implementation for the rendering engin
 
 ## GLB / GLTF 
 
-p align="center">
+<p align="center">
   <img src="images/portfolio/sponzaAtrium.png" width="80%"/>
   <br>
   <em>Classic Sponza Atrium</em>
