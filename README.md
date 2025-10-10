@@ -497,14 +497,14 @@ For other small scenes in here, i could see time going down from mins to seconds
 
 ## UI
 
-<video src="images/portfolio/RenderingVideo.mp4" />
-
 <div align="center">
 <table>
   <tbody>
     <tr>
       <td >
-        <img src="images/portfolio/Screenshot(13).png" width="100%">
+        
+<video src="images/portfolio/RenderingVideo.mp4" />
+
         <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
           Render Information
         </p>
