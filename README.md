@@ -8,7 +8,9 @@
 
 After spending months and casting **trillions** of rays, all the work has finally cumulated into "_Quasar_" - my very own **_Rendering Engine_** based on Path Tracing. The Hero Render is a testimony to that statement, a dragon - which symbolizes power, courage and authority.
 
-This repository contains a **_C++_** and **_Python_** implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections, I will walk you through the feature set and will conclude by mentioning the plans for future.
+This repository contains a **_C++_** and **_Python_** implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections, I will walk you through the feature set and will conclude by mentioning the plans for future. 
+
+**TIP:** Dark Mode would enhance the experience of reading, but ofcourse it's not a necessity!
 
 ## Index
 
