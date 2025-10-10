@@ -126,7 +126,7 @@ Here's a visual for Cornell's Box rendered using Quasar.
 ## Volumetrics
 
 <p align="center">
-  <img src="images/portfolio/info2/heroRender.png" width="80%"/>
+  <img src="images/portfolio/info_2/latestHeroRender.png" width="80%"/>
   <br>
   <em>Metal Fox</em>
 </p>
