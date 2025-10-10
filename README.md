@@ -57,4 +57,16 @@ The engine itself supports Global Illumination, as a result of the Path Tracing 
 
 ## Textures
 
+<p align="center">
+  <img src="images/portfolio/textures.png" width="80%"/>
+  <br>
+  <em>Metal Fox</em>
+</p>
+
 Textures help us to add the intricacies to the materials, they are also an important part of material pipeline in Quasar. The reason being even solid colours are implemented as Textures to maintain uniformity.
+
+There are 2 types of textures in the pipeline:
+- Procedural: Perlin Noise + Checkers
+- Image
+
+Like any other library, Textures are loaded asna separate entity, then attached to the material to be used during Rendering. One important thing for Image Textures is UV coordinates, which can either be loaded through GLB / GLTF or computed on the fly using barycentric coordinates
