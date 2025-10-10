@@ -407,7 +407,7 @@ Field of View controls how wide the camera can see. A smaller FOV gives a zoomed
 </table>
 </div>
 
-### Max Depth & SPP
+### Depth & SPP
 
 In ray tracing, max depth defines the maximum number of times a ray is allowed to bounce (or recurse) before it's terminated. Each bounce represents a light interaction — such as reflection, refraction, or scattering.
 
@@ -473,7 +473,7 @@ Fun Fact: Since SPP adds extra rays, the extra rays tend to be additional cost. 
 </table>
 </div>
 
-### Low Depth, Low SPP and Bounced Reflections
+#### Low Depth, Low SPP and Bounced Reflections
 
 You can see that low Depth + low SPP, would result into a grainy and dark image because not enough rays are spawned which results in bad sampling and low Depth causes less infoinformation to be gathered. In the right image, you can see that a image generated with good parameters would give a good anti-aliased + tinted reflections + smooth image
 
