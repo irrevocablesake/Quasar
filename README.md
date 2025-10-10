@@ -30,7 +30,7 @@ Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remai
 ## Shading
 
 <p align="center">
-  <img src="images/portfolio/flatSmoothShading.png" width="80%"/>
+  <img src="images/portfolio/SmoothFlatShading.png" width="80%"/>
   <br>
   <em>A Hero Render</em>
 </p>
