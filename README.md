@@ -32,7 +32,7 @@ Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remai
 <p align="center">
   <img src="images/portfolio/SmoothFlatShading.png" width="80%"/>
   <br>
-  <em>A Hero Render</em>
+  <em>Shading Types</em>
 </p>
 
 Lighting is mostly a play of normals and how we reflect the incoming ray. This leads to the following two cases:
