@@ -343,3 +343,40 @@ You can see that low Depth + low SPP, would result into a grainy and dark image 
   </tbody>
 </table>
 </div>
+
+## Multi-threading
+
+The nature of graphics rendering is embarrassingly parallel, it's like "hey, this is the process to calculate the color of a pixel, can you apply it to millions of pixels"?
+
+If we don't use this fact to our advantage then we are loosing a lot. That's why, I decided to add Multi-threading.
+
+The Multi-Threading is managed by a thread pool,which allows us to have a lot more control over the the threads themselves. In order to avoid blocking the main thread we spawn N threads, depending upon hardware concurrency, and then use N-1 of them for rendering and 1 thread for updating the UI, this process results into a seamless non-blocking workflow.
+
+The idea is to spawn max pure hardware threads, divide the image into Tiles depending upon number of threads and a multiplier. Ask each thread to compute values for the assigned Tile, write into image buffer and save the buffer to file.
+
+Once a thread finishes rendering a Tile, it grabs the next tile randomly.
+
+We do get a huge speed boost, anywhere from 5.5x to 24x ( upper limit being number of pure hardware threads ). As an example the volumetrics render of this repo, took around 1.4 hours to render, whereas without multi threading i believe it would have taken anywhere from 12 hours to 20 hours
+
+The Volumetrics scene is massive and complex: 1000 spheres, caustics, Fog, 10k samples per pixel and 40 as depth for each recursed ray.
+
+For other small scenes in here, i could see time going down from mins to seconds or hours to mins.
+
+## UI
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/Screenshot(13).png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Render Information
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+Qusar uses SFMl to display the result into window, the result is refreshed every few milliseconds. It consists of auto-save which is triggered the moment rendering is done, if one wants to save manually then pressing "s" can do that. Additionally, it also displays some additional information towards the top-left cornerof the window
