@@ -35,7 +35,7 @@ This repository contains a **_C++_** and **_Python_** implementation for the ren
 - [UI](#ui)
 
 ### GLB & GLTF 
-
+<hr>
 <p align="center">
   <img src="images/portfolio/sponzaAtrium.png" width="100%"/>
   <br>
@@ -50,7 +50,7 @@ As of now, everything is loaded as **triangles**, for materials GLTF format uses
 - Normal Map
 
 Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remaining values of Principled BSDF are a WIP ( present in repo but not used ), being implemented as **Disney BRDF**.
-
+<hr>
 ### Shading
 
 <p align="center">
