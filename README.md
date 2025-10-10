@@ -27,6 +27,20 @@ As of now, everything is loaded as triangles, for materials GLTF format uses Pri
 
 Additionally, it can interpret UVs, Normals, Tangents and Bi-Tangents. The remaining values of Principled BSDF are a WIP, being implemented as Disney BRDF.
 
+## Shading
+
+<p align="center">
+  <img src="images/portfolio/flatSmoothShading.png" width="80%"/>
+  <br>
+  <em>A Hero Render</em>
+</p>
+
+Lighting is mostly a play of normals and how we reflect the incoming ray. This leads to the following two cases:
+- Flat Shading: Use vertex normals
+- Smooth Shading: Use nighbouring normals 
+
+Fortunately, Quasar is capable of working with both the situations. All one has to do is make sure the appropriate shading mode is applies before exporting GLB / GLTF.
+
 ## Lights
 
 In Quasar, there are two types of light sources:
