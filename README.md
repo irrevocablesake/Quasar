@@ -252,3 +252,94 @@ Field of View controls how wide the camera can see. A smaller FOV gives a zoomed
   </tbody>
 </table>
 </div>
+
+## Max Depth & SPP
+
+In ray tracing, max depth defines the maximum number of times a ray is allowed to bounce (or recurse) before it's terminated. Each bounce represents a light interaction — such as reflection, refraction, or scattering.
+
+In Ray Tracing in One Weekend, this is used to avoid infinite recursion and control render time. A ray that exceeds the max depth is assumed to contribute no more light, and its color is set to black
+
+- A lower max depth results in faster renders but may miss deeper reflections or refractions.
+- A higher max depth produces more realistic images, especially for transparent or reflective materials, but is computationally more expensive.
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/maxDepth/maxdepth2samplerate500.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Max Depth 2 SPP 500
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/maxDepth/maxdepth10samplerate500.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Max Depth 10 SPP 500
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/maxDepth/maxdepth50samplerate500.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Max Depth 50 SPP 500
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+SPP controls how many rays are shot per pixel to estimate its final color. Instead of casting just one ray, multiple rays with slight random offsets are averaged to reduce noise and achieve anti-aliasing. 
+Fun Fact: Since SPP adds extra rays, the extra rays tend to be additional cost. DOF uses this additional cost to it's benefit and implements the blur effect
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/maxDepth/maxdepth50samplerate2.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Max Depth 50 SPP 2
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/maxDepth/maxdepth50samplerate50.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Max Depth 50 SPP 50
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/maxDepth/maxdepth50samplerate500.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Max Depth 50 SPP 500
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Low Depth + Low SPP and Bounced Reflections
+
+You can see that low Depth + low SPP, would result into a grainy and dark image because not enough rays are spawned which results in bad sampling and low Depth causes less infoinformation to be gathered. In the right image, you can see that a image generated with good parameters would give a good anti-aliased + tinted reflections + smooth image
+
+<div align="center">
+<table>
+  <tbody>
+    <tr>
+      <td >
+        <img src="images/portfolio/info_1/maxDepth/maxdepth2samplerate2.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Max Depth 2 SPP 2
+        </p>
+      </td>
+      <td>
+        <img src="images/portfolio/info_1/BouncedReflections/render.png" width="100%">
+        <p style="text-align: center; font-style: italic; font-size: 14px; color: #555;">
+          Bounced Reflections
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
