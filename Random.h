@@ -35,6 +35,15 @@ inline Vector3 generateRandomUnitVector(){
     }
 }
 
+inline Vector3 generateRandomUnitHemisphereVector( const Vector3 &normal ){
+    Vector3 unitSphereVector = generateRandomUnitVector();
+    if( dot( unitSphereVector, normal ) > 0.0 ){
+        return unitSphereVector;
+    }
+
+    return -unitSphereVector;
+}
+
 inline Vector3 randomInUnitDisk() {
     while( true ){
         Vector3 p = Vector3( generateRandomNumber( -1, 1 ), generateRandomNumber( -1, 1 ), 0 );

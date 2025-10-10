@@ -39,12 +39,20 @@ Color3 operator+( const Color3 &colorA, const Color3 &colorB ){
     return Color3( colorA.r() + colorB.r(), colorA.g() + colorB.g(), colorA.b() + colorB.b() );
 }
 
+Color3 operator-( const Color3 &colorA, const Color3 &colorB ){
+    return Color3( colorA.r() - colorB.r(), colorA.g() - colorB.g(), colorA.b() - colorB.b() );
+}
+
 Color3 operator/( const Color3 &colorA, const double value ){
     return Color3( colorA.r() / value, colorA.g() / value, colorA.b() / value  );
 }
 
 Color3 lerpColor( const Color3 &colorA, const Color3 &colorB, double factor ) {
     return ( 1 - factor ) * colorA + factor * colorB;
+}
+
+Color3 sqrt( const Color3 &color ) {
+    return Color3( std::sqrt( color.r() ), std::sqrt( color.g() ), std::sqrt( color.b() ) );
 }
 
 inline std::ostream &operator<<( std::ostream &out, const Color3 &color ){

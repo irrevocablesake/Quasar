@@ -144,6 +144,8 @@ public:
 
         threadCount = std::thread::hardware_concurrency() - 1;
         tileCount = threadCount * multiplier;
+        // tileCount = 1 ;
+        // threadCount = 1;
 
         int tilesX = std::ceil(std::sqrt(tileCount * image->aspectRatio));
         int tilesY = (tileCount + tilesX - 1) / tilesX;
@@ -208,7 +210,7 @@ public:
 private:
     int threadCount;
     int tileCount;
-    int multiplier = 2;
+    int multiplier = 64;
     int primitiveCount;
     int samplesPerPixel;
     int maxDepth;

@@ -60,10 +60,14 @@ void PixelSampler::writePixelColor(const Color3 &pixelColor, int i, int j )
     double gGammaCorrected = linearToGamma(gNormalized);
     double bGammaCorrected = linearToGamma(bNormalized);
 
+    // std::cout << rNormalized << " - " << gNormalized << " - " << bNormalized << std::endl;
+
     static const Interval intensity(0.000, 1.000);
-    std::uint8_t rChannel = ( std::uint8_t ) 255 * intensity.clamp(rGammaCorrected);
-    std::uint8_t gChannel = ( std::uint8_t ) 255 * intensity.clamp(gGammaCorrected);
-    std::uint8_t bChannel = ( std::uint8_t ) 255 * intensity.clamp(bGammaCorrected);
+    std::uint8_t rChannel = ( std::uint8_t ) ( 255 * intensity.clamp(rGammaCorrected) );
+    std::uint8_t gChannel = ( std::uint8_t ) ( 255 * intensity.clamp(gGammaCorrected) );
+    std::uint8_t bChannel = ( std::uint8_t ) ( 255 * intensity.clamp(bGammaCorrected) );
+
+    // std::cout << rChannel << " - " << gChannel << " - " << bChannel << std::endl;
 
     image -> setPixel(i, j, rChannel, gChannel, bChannel);
 }
@@ -85,11 +89,18 @@ Color3 PixelSampler::processPixelColor( Ray &ray, World &world, int maxDepth ){
         }
 
         if (dynamic_cast<Normal*>(intersectionManager.material.get()) ) {
-            return 0.5 * Color3(
-                intersectionManager.normal.x() + 1,
-                intersectionManager.normal.y() + 1,
-                intersectionManager.normal.z() + 1
+            // return 0.5 * Color3(
+            //     intersectionManager.shadingNormal.x() + 1,
+            //     intersectionManager.shadingNormal.z() + 1,
+            //     intersectionManager.shadingNormal.y() + 1
+            // );
+
+            return Color3(
+                std::abs( intersectionManager.shadingNormal.x() ),
+                std::abs( intersectionManager.shadingNormal.y() ),
+                std::abs( intersectionManager.shadingNormal.z() )
             );
+
         }
 
         Ray scattered;
@@ -125,8 +136,11 @@ Color3 PixelSampler::samplePixel( int i, int j, World &world ){
         Ray ray( origin, unitVector( pixelSample - origin ), rayTime );
 
         pixelColor += processPixelColor( ray, world, maxDepth );
+
         writePixelColor(pixelColor * ( 1.0 / ( float ) ( count + 1 ) ), j, i );
+        // std::cout << pixelColor << std::endl;
     }
+    // writePixelColor(pixelColor * ( 1.0 / samplesPerPixel ), j, i );
 
     return ( pixelColor * average );
 }

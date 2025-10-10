@@ -25,35 +25,108 @@ class GLTFLoader {
     public:
         GLTFLoader(){ }
 
+        shared_ptr<ImageTexture> loadTextureMap(aiTextureType type, aiMaterial *material){
+            aiString texturePath;
+            shared_ptr<ImageTexture> texture;
+
+            if( material -> GetTextureCount( type ) == 0 ){
+                texture = nullptr;
+                return texture;
+            }
+
+            aiReturn verdict = material->GetTexture(type, 0, &texturePath);
+            
+            if (verdict == AI_SUCCESS)
+            {
+                const aiTexture *embeddedTexture = scene->GetEmbeddedTexture(texturePath.C_Str());
+                if (embeddedTexture)
+                {
+                    if (embeddedTexture->mHeight == 0)
+                    {
+                        texture = make_shared<ImageTexture>((unsigned char *)embeddedTexture->pcData, embeddedTexture->mWidth);
+                        texture->loaded = true;
+                    }
+                }
+            }
+
+            if( !texture -> loaded ){
+                texture = nullptr;
+            }
+
+            return texture;
+        }
+
+        Color3 getDiffuseColor( aiMaterial *material ){
+            aiColor4D color;
+            if( material->Get(AI_MATKEY_COLOR_DIFFUSE, color) ){
+                return Color3( color.r, color.g, color.b );
+            }
+            return Color3( 1, 1, 1 );
+        }
+
+        float getRoughnessFactor( aiMaterial *material ){
+            float factor;
+            if( material->Get( AI_MATKEY_ROUGHNESS_FACTOR, factor ) ){
+                return factor;
+            }
+            return 0.5;
+        }
+
         void loadFile( string filePath ){
             scene = importer.ReadFile( filePath, 0 );
             if( !scene || !( scene -> HasMeshes() ) ){
                 std::clog << "ASSIMP Error:: No Scene or Meshes Found \n";
             }
 
+//      for (unsigned int i = 0; i < scene->mRootNode->mNumMeshes; ++i) {
+//     unsigned int meshIndex = scene->mRootNode->mMeshes[i];
+//     const aiMesh* mesh = scene->mMeshes[meshIndex];
+
+//     aiVector3D center(0,0,0);
+//     for (unsigned int v = 0; v < mesh->mNumVertices; ++v) {
+//         center += mesh->mVertices[v];
+//     }
+//     center /= mesh->mNumVertices;
+
+//     std::cout << "Mesh index: " << meshIndex
+//               << " (name: " << mesh->mName.C_Str() << ")\n";
+//     std::cout << "Center position: (" 
+//               << center.x << ", "
+//               << center.y << ", "
+//               << center.z << ")\n";
+// }
+
             for( unsigned int i = 0; i < scene -> mNumMeshes; i++ ){
                 aiMesh *mesh = scene -> mMeshes[ i ];
                 aiMaterial *material = scene -> mMaterials[ mesh -> mMaterialIndex ];
 
-                std::shared_ptr< Material > baseMaterial = std::make_shared< Diffuse >( Color3( 0.0, 0.0, 1.0 ) );
-                std::shared_ptr< ImageTexture > imageTexture = nullptr;
+                // if( mesh -> HasTangentsAndBitangents() ){
+                //     std::clog << "tangents and bitangents found" << std::endl;
+                // }
 
-                aiColor4D diffuseColor;
-                double roughnessFactor;
+                MaterialProperties properties;
 
-                aiReturn verdictDiffuse;
-                aiReturn verdictRoughness;
-                verdictDiffuse = material->Get( AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
-                verdictRoughness = material->Get( AI_MATKEY_ROUGHNESS_FACTOR, roughnessFactor );
-
-                if( verdictRoughness == AI_FAILURE ){
-                    std::clog << "failure for roughess" << std::endl;
+                properties.diffuseColor = getDiffuseColor(material);
+                properties.roughnessFactor = getRoughnessFactor(material);
+                properties.diffuseTexture = loadTextureMap(aiTextureType_DIFFUSE, material);
+                if (properties.diffuseTexture == nullptr)
+                {
+                    properties.diffuseTexture = make_shared<solidColor>(properties.diffuseColor);
                 }
-
-                if ( verdictDiffuse == AI_SUCCESS ){
-                    baseMaterial = make_shared< DiffuseBRDF >( Color3( diffuseColor.r, diffuseColor.g, diffuseColor.b ), 0.5, 0.5 );
+                properties.normalTexture = loadTextureMap(aiTextureType_NORMALS, material);
+                if (properties.normalTexture == nullptr)
+                {
+                    properties.normalTexture = make_shared<solidColor>(Color3(0.5, 0.5, 1.0));
                 }
-
+                properties.roughnessFactor = 1.0;
+                properties.subSurfaceFactor = 0.0;
+                properties.normalTextureFactor = 3;
+                properties.anisotropicFactor = 0.1;
+                properties.metalFactor = 1.0;
+                properties.fuzz = 0.5;
+                std::shared_ptr< Material > baseMaterial = make_shared<DisneyBRDF>( properties );
+                // std::cout << "metal" << std::endl;
+                
                 for( unsigned int faceIndex = 0; faceIndex < mesh -> mNumFaces; faceIndex++ ){
                     aiFace face = mesh -> mFaces[ faceIndex ];
 
@@ -66,6 +139,14 @@ class GLTFLoader {
                     aiVector3D n0 = mesh ->mNormals[ face.mIndices[ 0  ] ];
                     aiVector3D n1 = mesh ->mNormals[ face.mIndices[ 1  ] ];
                     aiVector3D n2 = mesh ->mNormals[ face.mIndices[ 2  ] ];
+
+                    aiVector3D t0 = mesh ->mTangents[ face.mIndices[ 0  ] ];
+                    aiVector3D t1 = mesh ->mTangents[ face.mIndices[ 1  ] ];
+                    aiVector3D t2 = mesh ->mTangents[ face.mIndices[ 2  ] ];
+
+                    aiVector3D bt0 = mesh ->mBitangents[ face.mIndices[ 0  ] ];
+                    aiVector3D bt1 = mesh ->mBitangents[ face.mIndices[ 1  ] ];
+                    aiVector3D bt2 = mesh ->mBitangents[ face.mIndices[ 2  ] ];
 
                     aiVector3D uv0 = mesh -> mTextureCoords[0][ face.mIndices[ 0 ] ];
                     aiVector3D uv1 = mesh -> mTextureCoords[0][ face.mIndices[ 1 ] ];
@@ -82,6 +163,18 @@ class GLTFLoader {
                         Vector3( n0.x, n0.y, n0.z ), 
                         Vector3( n1.x, n1.y, n1.z ), 
                         Vector3( n2.x, n2.y, n2.z ) 
+                    );
+
+                    triangle->setTangents(
+                        Vector3(t0.x, t0.y, t0.z),
+                        Vector3(t1.x, t1.y, t1.z),
+                        Vector3(t2.x, t2.y, t2.z)
+                    );
+
+                    triangle->setBiTangents(
+                        Vector3(bt0.x, bt0.y, bt0.z),
+                        Vector3(bt1.x, bt1.y, bt1.z),
+                        Vector3(bt2.x, bt2.y, bt2.z)
                     );
 
                     triangle -> setUVs(

@@ -35,6 +35,8 @@ class Triangle : public shape2D {
             boundingBox = AABB(boundingBox, sideAC); 
             
             NormalA = NormalB = NormalC = faceNormalizedNormal;
+
+            hasTangent = false;
             hasUVs = false;
         }
 
@@ -67,10 +69,52 @@ class Triangle : public shape2D {
                 return false;
             }
 
+            Vector3 worldNormal, tangent, bitangent;
+            Color3 rawNormal = material -> getNormalTexture() -> value( intersectionManager.u, intersectionManager.v, intersectedPoint );
+            Vector3 tangentNormal =  ( Vector3( rawNormal.r(), rawNormal.g(), rawNormal.b() ) * 2.0 - 1.0 ) ;
+                
+            if( !hasTangent ){
+                Vector3 edge1 = B - A;
+                Vector3 edge2 = C - A;
+                Vector3 deltaUV1 = UVB - UVA;
+                Vector3 deltaUV2 = UVC - UVA;
+                
+                float f = 1.0f / (deltaUV1.x() * deltaUV2.y() - deltaUV2.x() * deltaUV1.y());
+                
+                tangent = Vector3(
+                    f * (deltaUV2.y() * edge1.x() - deltaUV1.y() * edge2.x()),
+                    f * (deltaUV2.y() * edge1.y() - deltaUV1.y() * edge2.y()),
+                    f * (deltaUV2.y() * edge1.z() - deltaUV1.y() * edge2.z())
+                );
+                
+                tangent = unitVector( tangent - dot( tangent, normal ) * normal );
+                bitangent = unitVector( cross( normal, tangent ) );  
+            }
+            else{
+                tangent = unitVector( TangentA * alpha + TangentB * beta + TangentC * gamma );
+                bitangent = unitVector( BiTangentA * alpha + BiTangentB * beta + BiTangentC * gamma );
+            }
+
+            intersectionManager.T = tangent;
+            intersectionManager.B = bitangent;
+            intersectionManager.N = normal;
+
+            worldNormal = unitVector( Vector3(
+                    tangentNormal.x() * tangent.x() + tangentNormal.y() * bitangent.x() + tangentNormal.z() * normal.x(),
+                    tangentNormal.x() * tangent.y() + tangentNormal.y() * bitangent.y() + tangentNormal.z() * normal.y(),
+                    tangentNormal.x() * tangent.z() + tangentNormal.y() * bitangent.z() + tangentNormal.z() * normal.z()
+            ));
+                
+            worldNormal = Vector3( worldNormal.x() * material->getNormalTextureFactor(), worldNormal.y() * material -> getNormalTextureFactor(), worldNormal.z() );
+
             intersectionManager.t = t;
             intersectionManager.point = intersectedPoint;
             intersectionManager.material = material;
-            intersectionManager.setFaceNormal( ray, normal );
+
+            bool frontFace = dot( ray.direction(), normal ) < 0;
+            intersectionManager.frontFace = frontFace;
+            intersectionManager.normal = frontFace ? normal : -normal;
+            intersectionManager.shadingNormal = intersectionManager.normal;
 
             return true;
         }
@@ -108,6 +152,22 @@ class Triangle : public shape2D {
             NormalC = C;
         }
 
+        void setTangents( Vector3 A, Vector3 B, Vector3 C ){
+            TangentA = A;
+            TangentB = B;
+            TangentC = C;
+
+            hasTangent = false;
+        }
+
+        void setBiTangents( Vector3 A, Vector3 B, Vector3 C ){
+            BiTangentA = A;
+            BiTangentB = B;
+            BiTangentC = C;
+
+            hasTangent = true;
+        }
+
         void setUVs( Point3 A, Point3 B, Point3 C ){
             UVA = A;
             UVB = B;
@@ -129,11 +189,20 @@ class Triangle : public shape2D {
         Vector3 NormalB;
         Vector3 NormalC;
 
+        Vector3 TangentA;
+        Vector3 TangentB;
+        Vector3 TangentC;
+
+        Vector3 BiTangentA;
+        Vector3 BiTangentB;
+        Vector3 BiTangentC;
+
         Point3 UVA;
         Point3 UVB;
         Point3 UVC;
 
         bool hasUVs;
+        bool hasTangent;
         
         double D;
         double denom;
