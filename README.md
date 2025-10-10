@@ -33,7 +33,7 @@ This repository contains a c++ and python implementation for the rendering engin
 - [Multi Threading](#Multi-Threading)
 - [UI](#UI)
 
-## GLB / GLTF 
+## GLB & GLTF 
 
 <p align="center">
   <img src="images/portfolio/sponzaAtrium.png" width="100%"/>
@@ -277,7 +277,7 @@ Just to showcase the "magic" of PathTracing, I have also created the following t
 </table>
 </div>
 
-## Anti - Aliasing
+## Anti Aliasing
 
 <div align="center">
 <table>
@@ -318,7 +318,7 @@ Two things can control Depth of Field:
 - De-focus Angle: If there is a blur section in an image, then how much to blur it
 - De-focus Distance: When to place the plane, at this distance everything will be sharp
 
-#### De-focus Angle "How much to blur the blurry regions"
+#### Defocus Angle "How much to blur the blurry regions"
 
 <div align="center">
 <table>
@@ -347,7 +347,7 @@ Two things can control Depth of Field:
 </table>
 </div>
 
-#### De-focus Distance "What region should appear sharp"
+#### Defocus Distance "What region should appear sharp"
 
 <div align="center">
 <table>
@@ -370,7 +370,7 @@ Two things can control Depth of Field:
 </table>
 </div>
 
-## FOV
+## Field Of View ( FOV )
 
 Field of View controls how wide the camera can see. A smaller FOV gives a zoomed-in, narrow perspective, while a larger FOV creates a wide-angle view. We use vFOV here, but also hFOV would have been fine. In our case we supply the vFOV and the dimensions are automatically adjusted
 
@@ -461,7 +461,7 @@ Fun Fact: Since SPP adds extra rays, the extra rays tend to be additional cost. 
 </table>
 </div>
 
-## Low Depth + Low SPP and Bounced Reflections
+## Low Depth, Low SPP and Bounced Reflections
 
 You can see that low Depth + low SPP, would result into a grainy and dark image because not enough rays are spawned which results in bad sampling and low Depth causes less infoinformation to be gathered. In the right image, you can see that a image generated with good parameters would give a good anti-aliased + tinted reflections + smooth image
 
@@ -500,7 +500,7 @@ These implementations use a clever trick of transforming the ray to the local co
 
 Note: When reading the GLB, we just take the data and convert to our class of Triangles and Composites
 
-## Multi-threading
+## Multi Threading
 
 The nature of graphics rendering is embarrassingly parallel, it's like "hey, this is the process to calculate the color of a pixel, can you apply it to millions of pixels"?
 
