@@ -96,3 +96,17 @@ A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tra
 </p>
 
 Ambient light is the base layer of general illumination that fills a space, providing the overall brightness and establishing the mood or atmosphere. This feature also implies that we don't need any explicit light as the ambient light will contribute enough to generate a visually appealing result, albeit that depends upon the configuration of the Ambient Light.
+
+## Normal Map
+
+<p align="center">
+  <img src="images/portfolio/normalNoNormal.png" width="80%"/>
+  <br>
+  <em>Metal Fox</em>
+</p>
+
+Normal maps deserve their own section because of the sweet maths that goes behind them. Tangents, Bi-Tangents and Normals are the driving factor in this case. This orthogonal basis can either be loaded from GLB / GLTF or Quasar can generate them on the fly, just like UVs
+
+A normal map is a texture map in 3D computer graphics that stores directional information in an RGB image to simulate fine surface detail, such as bumps, grooves, and scratches, without altering the model's actual geometry. It basically modifies how light reflects off of a surface.
+
+Normal maps are pretty crucial, because if properly configured thay bring us closer to realism. 
