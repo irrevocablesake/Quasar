@@ -11,6 +11,7 @@ After spending months and casting **trillions** of rays, all the work has finall
 This repository contains a **_C++_** and **_Python_** implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections ( each section has visuals ), I will walk you through the feature set and will conclude by mentioning the plans for future. 
 
 **TIP:** Dark Mode would enhance the experience of reading, but ofcourse it's not a necessity!
+
 **Note:** All images in this repository are rendered using Quasar.
 
 ## Index
@@ -529,7 +530,7 @@ Qusar uses SFML to display the result into window, the result is refreshed every
 
 ## Author's Note:
 
-Quasar had a very hopeful conception, it was supposed to be a **CPU** based PathTracing Engine ~ I implemented it to deepen my knowledge of how exactly Rendering Engines work, eventually I started loosing a grip of that journey and thought about extending Quasar to **Vulkan** ( based on **Compute Shader** ), so I would be able to learn Vulkan ( coming from an **OpenGL** background ). But after spending more time, I have come to a conclusion to let Quasar be what it was meant to be, a CPU Rendering Engine, the only thing that is going to be added is: **Disney BRDF** ( WIP ).
+Quasar had a very hopeful conception, it was supposed to be a **CPU** based PathTracing Engine ~ I implemented it to deepen my knowledge of how exactly Rendering Engines work, eventually I started loosing a grip of that journey and thought about extending Quasar to **Vulkan** ( based on **Compute Shader** ), so I would be able to learn Vulkan ( coming from an **OpenGL** background ). But after spending more time, I have come to a conclusion to let Quasar be what it was meant to be, a CPU Rendering Engine, the only thing that is going to be added is: **Disney BRDF** ( WIP ), once done, the files will be re-structured into proper folders.
 
 As for my next journey, my knowledge about Path Tracing Engines is wayy better than what I had started with. The obvious next goal is to master **BRDFs**, **BTDFs**, **BSDFs** and **BSSDFs**, Quasar is going to teach me that and once done with it I will be working on a Vulkan implementation ( albiet more advanced )
 
