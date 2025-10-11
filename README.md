@@ -535,16 +535,16 @@ As for my next journey, my knowledge about Path Tracing Engines is wayy better t
 
 ## References:
 
-- [](https://cristianrosiu.github.io/posts/dof-blog/)
-- [](https://iquilezles.org/articles/intersectors/)
-- Advanced Global Illumination
-- [](https://schuttejoe.github.io/post/disneybsdf/)
-- [](https://cseweb.ucsd.edu/~tzli/cse272/wi2023/homework1.pdf)
-- [](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
-- [](https://raytracing.github.io/books/RayTracingTheNextWeek.html)
-- [](https://pbr-book.org/3ed-2018/Materials/Bump_Mapping)
-- [](https://boksajak.github.io/files/CrashCourseBRDF.pdf)
-- [](https://learnopengl.com/Advanced-Lighting/Normal-Mapping)
-- [](https://computergraphics.stackexchange.com/questions/5411/correct-way-to-set-normal-strength)
-- [](https://cseweb.ucsd.edu/~tzli/cse272/wi2023/)
+- [ Depth Of Field ](https://cristianrosiu.github.io/posts/dof-blog/)
+- [ Shape Intersection Function Theory ](https://iquilezles.org/articles/intersectors/)
+- Advanced Global Illumination ( Book )
+- [ Disney BRDF ](https://schuttejoe.github.io/post/disneybsdf/)
+- [ UCSD College Lecture Resource ](https://cseweb.ucsd.edu/~tzli/cse272/wi2023/homework1.pdf)
+- [ Ray Tracing In One Weekend ](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+- [ Ray Tracing The Next Week ](https://raytracing.github.io/books/RayTracingTheNextWeek.html)
+- [ PBRT: From Theory To Implementation ](https://pbr-book.org/3ed-2018/Materials/Bump_Mapping)
+- [ Crash Course In BRDF ](https://boksajak.github.io/files/CrashCourseBRDF.pdf)
+- [ Learn OpenGL ](https://learnopengl.com/Advanced-Lighting/Normal-Mapping)
+- [ Normal Map Strength ](https://computergraphics.stackexchange.com/questions/5411/correct-way-to-set-normal-strength)
+- [ UCSD College Lecture Resource ](https://cseweb.ucsd.edu/~tzli/cse272/wi2023/)
 
