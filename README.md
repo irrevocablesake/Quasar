@@ -11,6 +11,7 @@ After spending months and casting **trillions** of rays, all the work has finall
 This repository contains a **_C++_** and **_Python_** implementation for the rendering engine, albeit python is used just to upscale images, as a post processing effect, wherever required. In the next few sections ( each section has visuals ), I will walk you through the feature set and will conclude by mentioning the plans for future. 
 
 **TIP:** Dark Mode would enhance the experience of reading, but ofcourse it's not a necessity!
+**Note:** All images in this repository are rendered using Quasar.
 
 ## Index
 
@@ -69,10 +70,10 @@ Fortunately, Quasar is capable of working with both the situations. All one has 
 ### Lights
 
 In Quasar, there are two types of light sources:
-- Sources Light
+- Source Light
 - Ambient Light
 
-The engine itself supports** Global Illumination**, as a result of the Path Tracing algorithm, which means it will convey the **physics** of light upto a certain extent. The current implementation includes lights as a material, so all one has to do is apply a material to mesh.
+The engine itself supports **Global Illumination**, as a result of the Path Tracing algorithm, which means it will convey the **physics** of light upto a certain extent. The current implementation includes lights as a material, so all one has to do is apply a material to mesh.
 
 #### Source Light
 
@@ -82,7 +83,7 @@ The engine itself supports** Global Illumination**, as a result of the Path Trac
   <em>Source Light</em>
 </p>
 
-In this case, Quad geometry is used to create the shape of light, and one can see that the colors from different light sources **blend** and result into a 3rd color.
+In this case, Quad geometry is used to create the shape of light, and one can see that the colors from different light sources **blend** and result into a 3rd color. A direction conclusion of that effect is the change in the color of platform: In this case the platform appears to be white-ish in color but if you reference other images, you would see that the true color of platform is blueish.
 
 #### Ambient Light
 
@@ -92,7 +93,7 @@ In this case, Quad geometry is used to create the shape of light, and one can se
   <em>Ambient Light</em>
 </p>
 
-Ambient light is the base layer of **general illumination** that fills a space, providing the overall brightness and establishing the mood or atmosphere. This feature also implies that we don't need any explicit light as the ambient light will contribute enough to generate a visually appealing result, albeit that depends upon the configuration of the Ambient Light.
+Ambient light is the base layer of **general illumination** that fills a space, providing the overall brightness and establishing the mood or atmosphere. This feature also implies that we don't need any explicit lights, as the ambient light will contribute enough to generate a visually appealing result, albeit that depends upon the configuration of the Ambient Light.
 
 ### Textures
 
@@ -102,11 +103,11 @@ Ambient light is the base layer of **general illumination** that fills a space, 
   <em>Textures</em>
 </p>
 
-Textures help us to add the intricacies to the materials, they are also an important part of material pipeline in Quasar. The reason being even solid colours are implemented as Textures to maintain uniformity.
+Textures help us to add the intricacies to the materials, they are also an important part of material pipeline in Quasar. The reason being, even solid colours are implemented as Textures to maintain uniformity.
 
 There are 2 types of textures in the pipeline:
-- Procedural: Perlin Noise + Checkers
-- Image
+- **Procedural:** Perlin Noise + Checkers
+- **Image** Texture
 
 Like any other library, Textures are loaded as a separate entity, then attached to the material to be used during Rendering. One important thing for Image Textures is **UV** coordinates, which can either be loaded through GLB / GLTF or computed on the fly using **barycentric** coordinates
 
@@ -120,7 +121,7 @@ Like any other library, Textures are loaded as a separate entity, then attached 
 
 Motion blur is a visual effect that simulates the streaking or blurring of moving objects in a scene, caused by the relative motion between the camera and objects during the exposure time of a frame. In our case, the camera always stays stable and the object moves, this movement is described by assigning two positions to our desired object: the start position and the end position
 
-The Hero Render is a good example that encapsulates the entire idea, it also proves how true out implementation is to physical reality as it shows all the reflections of the surrounding light whilst being in motion.
+The Hero Render is a good example that encapsulates the entire idea, it also proves how true the implementation is to physical reality as it shows all the reflections of the surrounding light whilst being in motion.
 
 ### Normal Map
 
@@ -130,9 +131,9 @@ The Hero Render is a good example that encapsulates the entire idea, it also pro
   <em>Normal Map</em>
 </p>
 
-Normal maps deserve their own section because of the sweet maths that goes behind them._ Tangents_, _Bi-Tangents_ and _Normals_ are the driving factor in this case. This orthogonal basis can either be loaded from GLB / GLTF or Quasar can generate them on the fly, just like UVs
+Normal maps deserve their own section because of the sweet maths that goes behind them. _Tangents_, _Bi-Tangents_ and _Normals_ are the driving factor in this case. This orthogonal basis can either be loaded from GLB / GLTF or Quasar can generate them on the fly, just like UVs
 
-A normal map is a texture map in 3D computer graphics that stores directional information in an RGB image to simulate fine surface detail, such as bumps, grooves, and scratches, without altering the model's actual geometry. It basically modifies how light reflects off of a surface.
+A normal map is a texture map in 3D computer graphics that stores directional information in an RGB image to simulate fine surface detail, such as bumps, grooves, and scratches, without altering the model's actual geometry. It basically modifies how light reflects off of a surface, using the orthogonal basis described previously.
 
 Normal maps are pretty crucial, because if properly configured thay bring us closer to realism. 
 
@@ -152,7 +153,7 @@ Quasar has implemented them in the form of a Texture / Material, one has to defi
 
 ### Mesh Types and Transformations
 
-Quasar has a few in built types of geometries, which can be extended further easily. Majorly there are two types of geometries:
+Quasar has a few in-built types of geometries, the Primitive geometry list can be extended further easily. Majorly there are two types of geometries:
 - **Primitives** ( Sphere / Quad / Triangle )
 - **Composites** ( Composites / Primitives )
 
@@ -160,7 +161,7 @@ Each of them are described by pure **mathematical** functions. These equations n
 - Rotation
 - Translation
 
-These implementations use a clever trick of transforming the ray to the **local coordinate** system, rather than updating the geometrical data representing the geomtry
+These transformation implementations use a clever trick of transforming the ray to the **local coordinate** system, rather than updating the geometrical data representing the geomtry
 
 **Note**: When reading the GLB, we just take the data and convert to our class of Triangles and Composites
 
@@ -212,7 +213,7 @@ This section demonstrates different materials that exist, and how they interact 
 
 #### Metal
 
-Metal, as a material consists of two major properties: ***reflectance*** and ***color*** of the metal itself. The reflectance can also have a "***fuzz***" factor, just like in real life. Below you can see a progression of fuzz factor from shiny metal ball to almost diffuse metal ball ( acts just like a diffuse spehre material )
+Metal, as a material consists of two major properties: ***reflectance*** and ***color*** of the metal itself. The reflectance can also have a "***fuzz***" factor, just like in real life. Below you can see a progression of fuzz factor from shiny metal ball to almost diffuse metal ball ( acts just like a diffuse sphere material )
 
 <div align="center">
 <table>
@@ -330,7 +331,7 @@ The "Field" in "Depth of Field" is merely an area in which objects appear sharp,
 
 Two things can control Depth of Field:
 - **De-focus Angle:** If there is a blur section in an image, then how much to blur it
-- **De-focus Distance:** When to place the plane, at this distance everything will be sharp
+- **De-focus Distance:** Where to place the plane, at this distance everything will be sharp
 
 ##### Defocus Angle "How much to blur the blurry regions"
 
@@ -411,9 +412,9 @@ Field of View controls how wide the camera can see. A smaller FOV gives a zoomed
 
 ### Depth & SPP
 
-In ray tracing, max depth defines the maximum number of times a ray is allowed to bounce (or recurse) before it's terminated. Each bounce represents a light interaction — such as reflection, refraction, or scattering.
+In ray tracing, depth defines the maximum number of times a ray is allowed to bounce (or recurse) before it's terminated. Each bounce represents a light interaction — such as reflection, refraction, or scattering.
 
-This parameter is used to avoid infinite recursion and control render time. A ray that exceeds the max depth is assumed to contribute no more light, and its color is set to black
+This parameter is used to avoid infinite recursion and control render time. A ray that exceeds the depth is assumed to contribute no more light, and its color is set to black
 
 - A **lower** depth results in faster renders but may miss deeper reflections or refractions.
 - A **higher** depth produces more realistic images, especially for transparent or reflective materials, but is computationally more expensive.
@@ -446,7 +447,8 @@ This parameter is used to avoid infinite recursion and control render time. A ra
 </div>
 
 SPP ( Samples Per Pixel ) controls how many rays are shot per pixel to estimate its final color. Instead of casting just one ray, multiple rays with slight random offsets are averaged to reduce noise and achieve anti-aliasing. 
-Fun Fact: Since SPP adds extra rays, the extra rays tend to be additional cost. DOF uses this additional cost to it's benefit and implements the blur effect
+
+**Fun Fact:** Since SPP adds extra rays, the extra rays tend to be additional cost. DOF uses this additional cost to it's benefit and implements the blur effect
 
 <div align="center">
 <table>
@@ -475,7 +477,7 @@ Fun Fact: Since SPP adds extra rays, the extra rays tend to be additional cost. 
 </table>
 </div>
 
-You can see that low Depth + low SPP, would result into a grainy and dark image because not enough rays are spawned which results in bad sampling and low Depth causes less infoinformation to be gathered. In the right image, you can see that a image generated with good parameters would give a good anti-aliased + tinted reflections + smooth image
+Below you can see that low Depth + low SPP, would result into a grainy and dark image because not enough rays are spawned which results in bad sampling and low Depth causes less infoinformation to be gathered. In the right image, you can see that a image generated with good parameters would give a good anti-aliased + tinted reflections + smooth image
 
 <div align="center">
 <table>
@@ -500,7 +502,7 @@ You can see that low Depth + low SPP, would result into a grainy and dark image 
 
 ### Bounding Volume Hierarchies ( BVH )
 
-A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tracing by organizing scene geometry into nested bounding volumes, enabling efficient ray-object intersection tests, which in turn translates directly to improved rendering time. Earlier, without BVH, certain scenes took 12-14 hours, but with BVH that time came down to 1 hour
+A BVH (Bounding Volume Hierarchy) is a tree structure used to accelerate ray tracing by organizing scene geometry into nested bounding volumes, enabling efficient ray-object intersection tests, which in turn translates directly to improved rendering time. Inorder to render all the feature set present in Quasar with complex scenes, in reasonable time, BVH is a very important. Earlier, without BVH, certain scenes took 12-14 hours, but with BVH that time came down to 1 hour.
 
 ### Multi Threading
 
@@ -508,11 +510,9 @@ The nature of graphics rendering is embarrassingly parallel, it's like "hey, thi
 
 If we don't use this fact to our advantage then we are loosing a lot. That's why, I decided to add Multi-threading.
 
-The Multi-Threading is managed by a thread pool,which allows us to have a lot more control over the the threads themselves. In order to avoid blocking the main thread we spawn N threads, depending upon hardware concurrency, and then use N-1 of them for rendering and 1 thread for updating the UI, this process results into a seamless non-blocking workflow.
+The Multi-Threading is managed by a thread pool, which allows us to have a lot more control over the threads themselves. In order to avoid blocking the main thread we spawn N threads, depending upon hardware concurrency, and then use N-1 of them for rendering and 1 thread for updating the UI, this process results into a seamless non-blocking workflow.
 
-The idea is to spawn max pure hardware threads, divide the image into Tiles depending upon number of threads and a multiplier. Ask each thread to compute values for the assigned Tile, write into image buffer and save the buffer to file.
-
-Once a thread finishes rendering a Tile, it grabs the next tile randomly.
+The idea is to spawn max pure hardware threads, divide the image into Tiles depending upon number of threads and a multiplier. Ask each thread to compute values for the assigned Tile, write into image buffer and save the buffer to file. Once a thread finishes rendering a Tile, it grabs the next tile randomly.
 
 We do get a huge speed boost, anywhere from 5.5x to 24x ( upper limit being number of pure hardware threads ). As an example the volumetrics render of this repo, took around 1.4 hours to render, whereas without multi threading i believe it would have taken anywhere from 12 hours to 20 hours
 
@@ -524,10 +524,10 @@ For other small scenes in here, i could see time going down from mins to seconds
 
 https://github.com/user-attachments/assets/c5a35ebc-be32-4be4-a020-530870df95fb
 
-Qusar uses SFMl to display the result into window, the result is refreshed every few milliseconds. It consists of auto-save which is triggered the moment rendering is done, if one wants to save manually then pressing "s" can do that. Additionally, it also displays some additional information towards the top-left cornerof the window
+Qusar uses SFML to display the result into window, the result is refreshed every few milliseconds. It consists of auto-save which is triggered the moment rendering is done, if one wants to save manually then pressing "s" can do that. Additionally, it also displays some additional information towards the top-left cornerof the window
 
 ## Author's Note:
 
-Quasar had a very hopeful conception, it was supposed to be a **CPU** based PathTracing Engine ~ I implemented it to deepen my knowledge of how exactly Rendering Engines work, eventually I started loosing a grip of that journey and thought about extending Quasar to **Vulkan** ( based on **Compute Shader** ), so I would be able to learn Vulkan ( coming from an **OpenGL** background ). But after spending more time, I have come to a conclusion to let Quasar be what it was meant for a CPU Rendering Engine, the only thing that is going to be added is: **Disney BRDF**.
+Quasar had a very hopeful conception, it was supposed to be a **CPU** based PathTracing Engine ~ I implemented it to deepen my knowledge of how exactly Rendering Engines work, eventually I started loosing a grip of that journey and thought about extending Quasar to **Vulkan** ( based on **Compute Shader** ), so I would be able to learn Vulkan ( coming from an **OpenGL** background ). But after spending more time, I have come to a conclusion to let Quasar be what it was meant to be, a CPU Rendering Engine, the only thing that is going to be added is: **Disney BRDF** ( WIP ).
 
 As for my next journey, my knowledge about Path Tracing Engines is wayy better than what I had started with. The obvious next goal is to master **BRDFs**, **BTDFs**, **BSDFs** and **BSSDFs**, Quasar is going to teach me that and once done with it I will be working on a Vulkan implementation ( albiet more advanced )
